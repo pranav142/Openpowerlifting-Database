@@ -6,7 +6,8 @@ import math
 from multiprocessing import process
 import time, os
 from threading import Thread, current_thread
-from multiprocessing import Process, current_process, cpu_count, Pool
+from multiprocessing import Process, current_process, cpu_count, Pool, Lock
+import concurrent.futures
 
 number_of_examples = 452786
 step_size = 100
@@ -32,6 +33,8 @@ BENCH = 20
 DEADLIFT = 21
 TOTAL = 22
 DOTS = 23
+
+lock = Lock()
 
 
 def get_response(start, end):
@@ -75,7 +78,11 @@ def get_data_from_json(json_data):
     return df
 
 
+first_iteration = True
+
+
 def main(start_iteration, end_iteration):
+    global first_iteration
     pid = os.getpid()
     threadName = current_thread().name
     processName = current_process().name
@@ -93,8 +100,14 @@ def main(start_iteration, end_iteration):
             soup = get_response(start, end)
             json_data = convert_response_to_json(soup)
             df = get_data_from_json(json_data)
+            lock.acquire()
             # print(df.head())
-            df.to_csv(CSV_SAVE_PATH, mode="a", header=not iteration, index=False)
+            if first_iteration:
+                df.to_csv(CSV_SAVE_PATH, mode="a", header=True, index=False)
+                first_iteration = False
+            else:
+                df.to_csv(CSV_SAVE_PATH, mode="a", header=False, index=False)
+            lock.release()
         except Exception as e:
             print(f"error on {start} - {end}: {e}")
             continue
@@ -107,17 +120,21 @@ if __name__ == "__main__":
 
     number_of_processors = cpu_count()
     start_iteration = 0
-    steps = int(total_iterations / number_of_processors)
+    steps = math.ceil(total_iterations / number_of_processors)
     print(steps)
-    processes = []
+    threads = []
 
-    pool = Pool(processes=number_of_processors)
     for _ in range(number_of_processors):
-        pool.apply_async(main, args=(start_iteration, start_iteration + steps))
+        t = Thread(
+            target=main,
+            args=(start_iteration, start_iteration + steps),
+        )
+        threads.append(t)
+        t.start()
         start_iteration += steps
 
-    pool.close()
-    pool.join()
+    for t in threads:
+        t.join()
 
     end = time.time()
     print(f"Time taken in seconds - {end-start}")
