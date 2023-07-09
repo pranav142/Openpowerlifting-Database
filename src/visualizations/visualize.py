@@ -24,7 +24,11 @@ def plot_pie_chart(
 ):
     """Plots a pie chart"""
     plt.figure(figsize=(10, 7))
-    plt.pie(data.values, labels=data.index, autopct=digit_format)
+    plt.pie(
+        data.values,
+        labels=data.index,
+        autopct=digit_format,
+    )
     plt.axis("equal")
     plt.legend(title="Categories", loc="best")
     plt.title(title)
