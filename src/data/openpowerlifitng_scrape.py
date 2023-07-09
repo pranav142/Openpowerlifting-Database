@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+from requests import Response
 import pandas as pd
 import json
 import math
@@ -8,8 +9,12 @@ import time, os
 from threading import Thread, current_thread
 from multiprocessing import Process, current_process, cpu_count, Pool, Lock
 import concurrent.futures
+from dataclasses import dataclass
+from typing import Tuple, Optional, Dict, Any
+from enum import Enum
 
-number_of_examples = 452786
+# number_of_examples = 452786
+number_of_examples = 10000
 step_size = 100
 total_iterations = math.ceil(number_of_examples / step_size)
 
@@ -37,20 +42,59 @@ DOTS = 23
 lock = Lock()
 
 
-def get_response(start, end):
+class ServerConnectionStatus(Enum):
+    SUCCESSFUL = 200
+    NOT_FOUND = 404
+    UNAUTHORIZED = 401
+    INTERNAL_ERROR = 500
+
+
+@dataclass
+class Payload:
+    status: int
+    raw_response: Dict[str, Any]
+    start: int
+    end: int
+    content: Optional[Dict[str, Any]] = None
+
+    # TODO Fix Issue with post_init
+    def __post_init__(self):
+        self._generate_content
+
+    def _html_parser(self, html: str) -> str:
+        return html.body.p.text
+
+    def _convert_html_to_json(self, html: str) -> Optional[Dict[str, Any]]:
+        try:
+            raw_data = self._html_parser(html)
+            json_data = json.loads(raw_data)
+        except Exception as e:
+            print(f"Error: {e} for rows {self.start, self.end}")
+            json_data = None
+
+        return json_data
+
+    def _generate_content(self):
+        if self.status == ServerConnectionStatus.SUCCESSFUL.value:
+            html = BeautifulSoup(self.raw_response.text, "lxml")
+            self.content = self._convert_html_to_json(html)
+        else:
+            self.content = None
+
+
+def get_response(start: int, end: int) -> Payload:
     url = f"https://www.openpowerlifting.org/api/rankings?start={start}&end={end}&lang=en&units=lbs"
     response = requests.get(url)
-    soup = BeautifulSoup(response.text, "lxml")
-    return soup
+    data = Payload(
+        status=response.status_code, raw_response=response, start=start, end=end
+    )
+    print(data.content)
+    return data
 
 
-def convert_response_to_json(soup):
-    json_data = json.loads(soup.body.p.text)
-    return json_data
-
-
-def get_data_from_json(json_data):
+def get_data_from_json(data: Payload):
     rows = []
+    json_data = data.content
     for row in json_data["rows"]:
         rows.append(
             {
@@ -97,9 +141,9 @@ def main(start_iteration, end_iteration):
         # print(f"Start: {start}, End: {end}")
 
         try:
-            soup = get_response(start, end)
-            json_data = convert_response_to_json(soup)
-            df = get_data_from_json(json_data)
+            data = get_response(start, end)
+            # json_data = convert_response_to_json(soup)
+            df = get_data_from_json(data)
             lock.acquire()
             # print(df.head())
             if first_iteration:
