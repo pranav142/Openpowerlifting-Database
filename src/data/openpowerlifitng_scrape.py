@@ -9,7 +9,7 @@ import time, os
 from threading import Thread, current_thread
 from multiprocessing import Process, current_process, cpu_count, Pool, Lock
 import concurrent.futures
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Tuple, Optional, Dict, Any
 from enum import Enum
 
@@ -26,8 +26,8 @@ INSTAGRAM = 4
 ORIGIN = 6
 FEDERATION = 8
 COMPETITION_DATE = 9
-COMPETITON_COUNTRY = 10
-COMPETITON_CITY = 11
+COMPETITION_COUNTRY = 10
+COMPETITION_CITY = 11
 GENDER = 13
 EQUIPMENT = 14
 AGE = 15
@@ -52,14 +52,13 @@ class ServerConnectionStatus(Enum):
 @dataclass
 class Payload:
     status: int
-    raw_response: Dict[str, Any]
+    raw_response: str = field(repr=False)
     start: int
     end: int
-    content: Optional[Dict[str, Any]] = None
+    content: dict[str, Any] = field(default_factory=dict, init=False)
 
-    # TODO Fix Issue with post_init
     def __post_init__(self):
-        self._generate_content
+        self._generate_content()
 
     def _html_parser(self, html: str) -> str:
         return html.body.p.text
@@ -88,38 +87,34 @@ def get_response(start: int, end: int) -> Payload:
     data = Payload(
         status=response.status_code, raw_response=response, start=start, end=end
     )
-    print(data.content)
     return data
 
 
+def extract_info(row: list):
+    return {
+        "Number": row[NUMBER],
+        "Name": row[NAME],
+        "Instagram Handle": row[INSTAGRAM],
+        "Origin": row[ORIGIN],
+        "Federation": row[FEDERATION],
+        "Competition Date": row[COMPETITION_DATE],
+        "Competition Country": row[COMPETITION_COUNTRY],
+        "Competition City": row[COMPETITION_CITY],
+        "Gender": row[GENDER],
+        "Equipment": row[EQUIPMENT],
+        "Age": row[AGE],
+        "Weight": row[WEIGHT],
+        "Class": row[CLASS_],
+        "Squat": row[SQUAT],
+        "Bench": row[BENCH],
+        "Deadlift": row[DEADLIFT],
+        "Total": row[TOTAL],
+        "Dots": row[DOTS],
+    }
+
+
 def get_data_from_json(data: Payload):
-    rows = []
-    json_data = data.content
-    for row in json_data["rows"]:
-        rows.append(
-            {
-                "Number": row[NUMBER],
-                "Name": row[NAME],
-                "Instagram Handle": row[INSTAGRAM],
-                "Origin": row[ORIGIN],
-                "Federation": row[FEDERATION],
-                "Competition Date": row[COMPETITION_DATE],
-                "Competition Country": row[COMPETITON_COUNTRY],
-                "Competition City": row[COMPETITON_CITY],
-                "Gender": row[GENDER],
-                "Equipment": row[EQUIPMENT],
-                "Age": row[AGE],
-                "Weight": row[WEIGHT],
-                "Class": row[CLASS_],
-                "Squat": row[SQUAT],
-                "Bench": row[BENCH],
-                "Deadlift": row[DEADLIFT],
-                "Total": row[TOTAL],
-                "Dots": row[DOTS],
-            }
-        )
-    df = pd.DataFrame(rows)
-    return df
+    return pd.DataFrame([extract_info(row) for row in data.content["rows"]])
 
 
 first_iteration = True
