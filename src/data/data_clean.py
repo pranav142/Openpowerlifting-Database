@@ -4,6 +4,7 @@ import functools
 from typing import Callable
 import os
 
+
 CompasableFunction = Callable[[pd.DataFrame], pd.DataFrame]
 
 
@@ -49,7 +50,7 @@ def rename_columns(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def process_data(raw_df_path: str) -> pd.DataFrame:
-    """Processes the data"""
+    """chains preprocessing steps on the data to return final transformed dataframe"""
     raw_data = pd.read_csv(raw_df_path)
     data_processing = compose(
         rename_columns, clean_class_column, clean_age_column, sort_df, convert_date
@@ -58,7 +59,7 @@ def process_data(raw_df_path: str) -> pd.DataFrame:
     return processed_df
 
 
-def clear_save_path(save_df_path: str):
+def clear_save_path(save_df_path: str) -> None:
     """Ensures the save path is clear so there are no file conflicts"""
     if os.path.exists(save_df_path):
         print("Conflicting file found")
@@ -68,7 +69,7 @@ def clear_save_path(save_df_path: str):
         print("File does not exist yet. Loading new data...")
 
 
-def main(raw_df_path: str, save_df_path: str):
+def main(raw_df_path: str, save_df_path: str) -> None:
     processed_df = process_data(raw_df_path)
     clear_save_path(save_df_path)
     processed_df.to_csv(save_df_path, index=False)
@@ -76,6 +77,6 @@ def main(raw_df_path: str, save_df_path: str):
 
 
 if __name__ == "__main__":
-    RAW_DF_PATH = "../../data/raw/openpowerlifting.csv"
-    SAVE_DF_PATH = "../../data/processed/processed_lifting_data.csv"
+    RAW_DF_PATH = "././data/raw/openpowerlifting.csv"
+    SAVE_DF_PATH = "././data/processed/processed_lifting_data.csv"
     main(RAW_DF_PATH, SAVE_DF_PATH)

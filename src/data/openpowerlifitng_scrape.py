@@ -1,28 +1,19 @@
-from bs4 import BeautifulSoup
 import requests
 import pandas as pd
-import json
-import math
-from multiprocessing import process
 import time, os
-from threading import Thread, current_thread
-from multiprocessing import Process, current_process, cpu_count, Pool, Lock
-import concurrent.futures
+from threading import Thread, current_thread, Lock
+from multiprocessing import Process, current_process, cpu_count, Pool
+from payload import Payload
+from config import Configuration
 
-number_of_examples = 452786
-step_size = 100
-total_iterations = math.ceil(number_of_examples / step_size)
-
-CSV_SAVE_PATH = "..\\..\\data\\raw\\openpowerlifting.csv"
-# Indexes of data in json
 NUMBER = 1
 NAME = 2
 INSTAGRAM = 4
 ORIGIN = 6
 FEDERATION = 8
 COMPETITION_DATE = 9
-COMPETITON_COUNTRY = 10
-COMPETITON_CITY = 11
+COMPETITION_COUNTRY = 10
+COMPETITION_CITY = 11
 GENDER = 13
 EQUIPMENT = 14
 AGE = 15
@@ -34,107 +25,123 @@ DEADLIFT = 21
 TOTAL = 22
 DOTS = 23
 
-lock = Lock()
 
-
-def get_response(start, end):
+def get_powerlifting_data(start: int, end: int) -> Payload:
     url = f"https://www.openpowerlifting.org/api/rankings?start={start}&end={end}&lang=en&units=lbs"
     response = requests.get(url)
-    soup = BeautifulSoup(response.text, "lxml")
-    return soup
+    data = Payload(
+        status=response.status_code, raw_response=response, start=start, end=end
+    )
+    return data
 
 
-def convert_response_to_json(soup):
-    json_data = json.loads(soup.body.p.text)
-    return json_data
+def row_to_dictionary(row: list):
+    return {
+        "Number": row[NUMBER],
+        "Name": row[NAME],
+        "Instagram Handle": row[INSTAGRAM],
+        "Origin": row[ORIGIN],
+        "Federation": row[FEDERATION],
+        "Competition Date": row[COMPETITION_DATE],
+        "Competition Country": row[COMPETITION_COUNTRY],
+        "Competition City": row[COMPETITION_CITY],
+        "Gender": row[GENDER],
+        "Equipment": row[EQUIPMENT],
+        "Age": row[AGE],
+        "Weight": row[WEIGHT],
+        "Class": row[CLASS_],
+        "Squat": row[SQUAT],
+        "Bench": row[BENCH],
+        "Deadlift": row[DEADLIFT],
+        "Total": row[TOTAL],
+        "Dots": row[DOTS],
+    }
 
 
-def get_data_from_json(json_data):
-    rows = []
-    for row in json_data["rows"]:
-        rows.append(
-            {
-                "Number": row[NUMBER],
-                "Name": row[NAME],
-                "Instagram Handle": row[INSTAGRAM],
-                "Origin": row[ORIGIN],
-                "Federation": row[FEDERATION],
-                "Competition Date": row[COMPETITION_DATE],
-                "Competition Country": row[COMPETITON_COUNTRY],
-                "Competition City": row[COMPETITON_CITY],
-                "Gender": row[GENDER],
-                "Equipment": row[EQUIPMENT],
-                "Age": row[AGE],
-                "Weight": row[WEIGHT],
-                "Class": row[CLASS_],
-                "Squat": row[SQUAT],
-                "Bench": row[BENCH],
-                "Deadlift": row[DEADLIFT],
-                "Total": row[TOTAL],
-                "Dots": row[DOTS],
-            }
-        )
-    df = pd.DataFrame(rows)
-    return df
+def save_data_to_csv(data: Payload, save_path: str, header_flag: int) -> None:
+    df = pd.DataFrame([row_to_dictionary(row) for row in data.content["rows"]])
+    df.to_csv(save_path, mode="a", header=header_flag, index=False)
 
 
-first_iteration = True
+def get_process_info() -> tuple[str, str, str]:
+    process_id = os.getpid()
+    thread_name = current_thread().name
+    process_name = current_process().name
+    return process_id, thread_name, process_name
 
 
-def main(start_iteration, end_iteration):
-    global first_iteration
-    pid = os.getpid()
-    threadName = current_thread().name
-    processName = current_process().name
+def scrape_data(
+    config: Configuration,
+    lock: Lock,
+    start_iteration: int,
+    end_iteration: int,
+) -> None:
+    assert (
+        config.step_size > 0 and config.step_size <= 100
+    ), "Configuration for step size must be between 0 and 100"
+
+    assert (
+        start_iteration >= 0 and end_iteration >= 0
+    ), "Ensure start and end iterations are positive numbers"
+
+    process_id, thread_name, process_name = get_process_info()
 
     print(
-        f"{pid} * {processName} * {threadName} ---> Start getting data from columns {start_iteration * 100} - {end_iteration * 100}"
+        f"{process_id} * {thread_name} * {process_name}  ---> Start getting data from columns {start_iteration * 100} - {end_iteration * 100}"
     )
 
     for iteration in range(start_iteration, end_iteration):
-        start = iteration * step_size
-        end = start + step_size - 1
-        # print(f"Start: {start}, End: {end}")
+        start = iteration * config.step_size
+        end = start + config.step_size - 1
 
         try:
-            soup = get_response(start, end)
-            json_data = convert_response_to_json(soup)
-            df = get_data_from_json(json_data)
+            data = get_powerlifting_data(start, end)
             lock.acquire()
-            # print(df.head())
-            if first_iteration:
-                df.to_csv(CSV_SAVE_PATH, mode="a", header=True, index=False)
-                first_iteration = False
-            else:
-                df.to_csv(CSV_SAVE_PATH, mode="a", header=False, index=False)
-            lock.release()
+            save_data_to_csv(
+                data,
+                save_path=config.absolute_save_path,
+                header_flag=not start,
+            )
         except Exception as e:
             print(f"error on {start} - {end}: {e}")
             continue
+        finally:
+            lock.release()
+    print(
+        f"{process_id} * {process_name} * {thread_name} ---> Finished getting data..."
+    )
 
-    print(f"{pid} * {processName} * {threadName} ---> Finished getting data...")
 
+def main() -> None:
+    start_iteration = 0
+    config = Configuration(number_of_threads=50)
+    lock = Lock()
+    print("Config Settings: \n")
+    print(f"{config}\n\n")
 
-if __name__ == "__main__":
+    print("-----------Starting To Scrape Data------------")
+
     start = time.time()
 
-    number_of_processors = cpu_count()
-    start_iteration = 0
-    steps = math.ceil(total_iterations / number_of_processors)
-    print(steps)
     threads = []
-
-    for _ in range(number_of_processors):
+    for _ in range(config.number_of_threads):
         t = Thread(
-            target=main,
-            args=(start_iteration, start_iteration + steps),
+            target=scrape_data,
+            args=(config, lock, start_iteration, start_iteration + config.steps),
         )
         threads.append(t)
         t.start()
-        start_iteration += steps
+        start_iteration += config.steps
 
     for t in threads:
         t.join()
 
     end = time.time()
-    print(f"Time taken in seconds - {end-start}")
+
+    print(
+        f"{config.number_of_examples} gathered and saved at {config.absolute_save_path} in {end-start} seconds"
+    )
+
+
+if __name__ == "__main__":
+    main()
