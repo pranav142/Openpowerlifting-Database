@@ -1,25 +1,11 @@
-from bs4 import BeautifulSoup
 import requests
-from requests import Response
 import pandas as pd
-import json
-import math
-from multiprocessing import process
 import time, os
-from threading import Thread, current_thread
-from multiprocessing import Process, current_process, cpu_count, Pool, Lock
-import concurrent.futures
-from dataclasses import dataclass, field
-from typing import Tuple, Optional, Dict, Any
-from enum import Enum
+from threading import Thread, current_thread, Lock
+from multiprocessing import Process, current_process, cpu_count, Pool
+from payload import Payload
+from config import Configuration
 
-# number_of_examples = 452786
-number_of_examples = 10000
-step_size = 100
-total_iterations = math.ceil(number_of_examples / step_size)
-
-CSV_SAVE_PATH = "..\\..\\data\\raw\\openpowerlifting.csv"
-# Indexes of data in json
 NUMBER = 1
 NAME = 2
 INSTAGRAM = 4
@@ -39,49 +25,8 @@ DEADLIFT = 21
 TOTAL = 22
 DOTS = 23
 
-lock = Lock()
 
-
-class ServerConnectionStatus(Enum):
-    SUCCESSFUL = 200
-    NOT_FOUND = 404
-    UNAUTHORIZED = 401
-    INTERNAL_ERROR = 500
-
-
-@dataclass
-class Payload:
-    status: int
-    raw_response: str = field(repr=False)
-    start: int
-    end: int
-    content: dict[str, Any] = field(default_factory=dict, init=False)
-
-    def __post_init__(self):
-        self._generate_content()
-
-    def _html_parser(self, html: str) -> str:
-        return html.body.p.text
-
-    def _convert_html_to_json(self, html: str) -> Optional[Dict[str, Any]]:
-        try:
-            raw_data = self._html_parser(html)
-            json_data = json.loads(raw_data)
-        except Exception as e:
-            print(f"Error: {e} for rows {self.start, self.end}")
-            json_data = None
-
-        return json_data
-
-    def _generate_content(self):
-        if self.status == ServerConnectionStatus.SUCCESSFUL.value:
-            html = BeautifulSoup(self.raw_response.text, "lxml")
-            self.content = self._convert_html_to_json(html)
-        else:
-            self.content = None
-
-
-def get_response(start: int, end: int) -> Payload:
+def get_powerlifting_data(start: int, end: int) -> Payload:
     url = f"https://www.openpowerlifting.org/api/rankings?start={start}&end={end}&lang=en&units=lbs"
     response = requests.get(url)
     data = Payload(
@@ -90,7 +35,7 @@ def get_response(start: int, end: int) -> Payload:
     return data
 
 
-def extract_info(row: list):
+def row_to_dictionary(row: list):
     return {
         "Number": row[NUMBER],
         "Name": row[NAME],
@@ -113,67 +58,90 @@ def extract_info(row: list):
     }
 
 
-def get_data_from_json(data: Payload):
-    return pd.DataFrame([extract_info(row) for row in data.content["rows"]])
+def save_data_to_csv(data: Payload, save_path: str, header_flag: int) -> None:
+    df = pd.DataFrame([row_to_dictionary(row) for row in data.content["rows"]])
+    df.to_csv(save_path, mode="a", header=header_flag, index=False)
 
 
-first_iteration = True
+def get_process_info() -> tuple[str, str, str]:
+    process_id = os.getpid()
+    thread_name = current_thread().name
+    process_name = current_process().name
+    return process_id, thread_name, process_name
 
 
-def main(start_iteration, end_iteration):
-    global first_iteration
-    pid = os.getpid()
-    threadName = current_thread().name
-    processName = current_process().name
+def scrape_data(
+    config: Configuration,
+    lock: Lock,
+    start_iteration: int,
+    end_iteration: int,
+) -> None:
+    assert (
+        config.step_size > 0 and config.step_size <= 100
+    ), "Configuration for step size must be between 0 and 100"
+
+    assert (
+        start_iteration >= 0 and end_iteration >= 0
+    ), "Ensure start and end iterations are positive numbers"
+
+    process_id, thread_name, process_name = get_process_info()
 
     print(
-        f"{pid} * {processName} * {threadName} ---> Start getting data from columns {start_iteration * 100} - {end_iteration * 100}"
+        f"{process_id} * {thread_name} * {process_name}  ---> Start getting data from columns {start_iteration * 100} - {end_iteration * 100}"
     )
 
     for iteration in range(start_iteration, end_iteration):
-        start = iteration * step_size
-        end = start + step_size - 1
-        # print(f"Start: {start}, End: {end}")
+        start = iteration * config.step_size
+        end = start + config.step_size - 1
 
         try:
-            data = get_response(start, end)
-            # json_data = convert_response_to_json(soup)
-            df = get_data_from_json(data)
+            data = get_powerlifting_data(start, end)
             lock.acquire()
-            # print(df.head())
-            if first_iteration:
-                df.to_csv(CSV_SAVE_PATH, mode="a", header=True, index=False)
-                first_iteration = False
-            else:
-                df.to_csv(CSV_SAVE_PATH, mode="a", header=False, index=False)
-            lock.release()
+            save_data_to_csv(
+                data,
+                save_path=config.absolute_save_path,
+                header_flag=not start,
+            )
         except Exception as e:
             print(f"error on {start} - {end}: {e}")
             continue
+        finally:
+            lock.release()
+    print(
+        f"{process_id} * {process_name} * {thread_name} ---> Finished getting data..."
+    )
 
-    print(f"{pid} * {processName} * {threadName} ---> Finished getting data...")
 
+def main() -> None:
+    start_iteration = 0
+    config = Configuration(number_of_threads=50)
+    lock = Lock()
+    print("Config Settings: \n")
+    print(f"{config}\n\n")
 
-if __name__ == "__main__":
+    print("-----------Starting To Scrape Data------------")
+
     start = time.time()
 
-    number_of_processors = cpu_count()
-    start_iteration = 0
-    steps = math.ceil(total_iterations / number_of_processors)
-    print(steps)
     threads = []
-
-    for _ in range(number_of_processors):
+    for _ in range(config.number_of_threads):
         t = Thread(
-            target=main,
-            args=(start_iteration, start_iteration + steps),
+            target=scrape_data,
+            args=(config, lock, start_iteration, start_iteration + config.steps),
         )
         threads.append(t)
         t.start()
-        start_iteration += steps
+        start_iteration += config.steps
 
     for t in threads:
         t.join()
 
     end = time.time()
-    print(f"Time taken in seconds - {end-start}")
+
+    print(
+        f"{config.number_of_examples} gathered and saved at {config.absolute_save_path} in {end-start} seconds"
+    )
+
+
+if __name__ == "__main__":
+    main()
