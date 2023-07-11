@@ -7,7 +7,7 @@ import seaborn as sns
 def plot_bar_graph(
     *, data: pd.core.series.Series, title: str, xlabel: str, ylabel: str, kind: str
 ):
-    """Plots a bargraph using data"""
+    """Plots a bargraph"""
     plt.figure(figsize=(10, 7))
     data.plot(kind=kind, color=plt.cm.Set3(range(10)))
     plt.title(title)
