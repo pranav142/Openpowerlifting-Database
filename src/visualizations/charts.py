@@ -67,3 +67,17 @@ def plot_histogram(
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.show()
+
+
+def show_column_stats(*, data: pd.DataFrame, column: str, hue: str = None) -> None:
+    """Gives a general overview of a column"""
+    assert column in data.columns, "column not found in dataframe"
+    if hue is None:
+        print(f"{column} statistics")
+        print(data[column].describe())
+    else:
+        assert hue in data.columns, "hue could not be found in columns"
+        unique_hues = data[hue].unique()
+        for hue_value in unique_hues:
+            print(f"{column} statistics for {hue_value}")
+            print(data.loc[data[hue] == hue_value][column].describe(), end="\n\n")
