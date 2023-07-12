@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 import time, os
 from threading import Thread, current_thread, Lock
-from multiprocessing import Process, current_process, cpu_count, Pool
+from multiprocessing import current_process
 from payload import Payload
 from config import Configuration
 

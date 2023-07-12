@@ -2,5 +2,6 @@
 scratch.py
 scratch2.py
 PowerLifting.code-workspace
-src/visualizations/__pycache__/
-src/data/__pycache__/
+__pycache__
+tests/*.coverage
+tests/.pytest_cache
