@@ -99,7 +99,7 @@ def scrape_data(
             lock.acquire()
             save_data_to_csv(
                 data,
-                save_path=config.absolute_save_path,
+                save_path=config.save_path,
                 header_flag=not start,
             )
         except Exception as e:
@@ -114,7 +114,7 @@ def scrape_data(
 
 def main() -> None:
     start_iteration = 0
-    config = Configuration(number_of_threads=50)
+    config = Configuration(file_name="openpowerlifting.csv", number_of_threads=50)
     lock = Lock()
     print("Config Settings: \n")
     print(f"{config}\n\n")
@@ -139,7 +139,7 @@ def main() -> None:
     end = time.time()
 
     print(
-        f"{config.number_of_examples} gathered and saved at {config.absolute_save_path} in {end-start} seconds"
+        f"{config.number_of_examples} gathered and saved at {config.save_path} in {end-start} seconds"
     )
 
 
