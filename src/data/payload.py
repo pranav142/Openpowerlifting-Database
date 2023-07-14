@@ -21,6 +21,10 @@ class Payload:
     content: Optional[dict[str, any]] = field(default_factory=dict, init=False)
 
     def __post_init__(self) -> None:
+        assert (
+            self.start >= 0 and self.end >= 0
+        ), "ensure start and end are greater than 0"
+        assert self.start <= self.end, "ensure start is less than end"
         self.content = self._generate_content()
 
     def _html_parser(self, html: str) -> str:
@@ -37,5 +41,5 @@ class Payload:
         return json_data
 
     def _generate_content(self) -> Optional[dict[str, any]]:
-        html = BeautifulSoup(self.raw_response.text, "lxml")
+        html = BeautifulSoup(self.raw_response, "lxml")
         return self._convert_html_to_json(html)

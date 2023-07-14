@@ -30,7 +30,7 @@ def get_powerlifting_data(start: int, end: int) -> Payload:
     url = f"https://www.openpowerlifting.org/api/rankings?start={start}&end={end}&lang=en&units=lbs"
     response = requests.get(url)
     data = Payload(
-        status=response.status_code, raw_response=response, start=start, end=end
+        status=response.status_code, raw_response=response.text, start=start, end=end
     )
     return data
 
