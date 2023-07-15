@@ -5,6 +5,7 @@ from threading import Thread, current_thread, Lock
 from multiprocessing import current_process
 from payload import Payload
 from config import Configuration
+from functools import wraps
 
 NUMBER = 1
 NAME = 2
@@ -24,6 +25,19 @@ BENCH = 20
 DEADLIFT = 21
 TOTAL = 22
 DOTS = 23
+
+
+def timeit(func):
+    @wraps(func)
+    def timeit_wrapper(*args, **kwargs):
+        start_time = time.perf_counter()
+        result = func(*args, **kwargs)
+        end_time = time.perf_counter()
+        total_time = end_time - start_time
+        print(f"Function {func.__name__} Took {total_time:.4f} seconds to execute")
+        return result
+
+    return timeit_wrapper
 
 
 def get_powerlifting_data(start: int, end: int) -> Payload:
@@ -112,6 +126,7 @@ def scrape_data(
     )
 
 
+@timeit
 def main() -> None:
     start_iteration = 0
     config = Configuration(file_name="openpowerlifting.csv", number_of_threads=50)
@@ -120,8 +135,6 @@ def main() -> None:
     print(f"{config}\n\n")
 
     print("-----------Starting To Scrape Data------------")
-
-    start = time.time()
 
     threads = []
     for _ in range(config.number_of_threads):
@@ -135,12 +148,6 @@ def main() -> None:
 
     for t in threads:
         t.join()
-
-    end = time.time()
-
-    print(
-        f"{config.number_of_examples} gathered and saved at {config.save_path} in {end-start} seconds"
-    )
 
 
 if __name__ == "__main__":

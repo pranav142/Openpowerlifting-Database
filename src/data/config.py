@@ -34,6 +34,6 @@ class Configuration:
         assert self.file_name.endswith(
             ".csv"
         ), "Please enter in filename as csv i.e. filename.csv"
-        current_time = time.strftime("%Y-%m-%d", time.localtime())
+        current_time = time.strftime("[%Y-%m-%d]", time.localtime())
         filename_with_time = current_time + "_" + self.file_name
         return os.path.join(self.folder_dir, filename_with_time)
