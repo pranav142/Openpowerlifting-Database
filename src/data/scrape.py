@@ -144,6 +144,7 @@ def main() -> None:
         )
         threads.append(t)
         t.start()
+        time.sleep(0.1)
         start_iteration += config.steps
 
     for t in threads:
