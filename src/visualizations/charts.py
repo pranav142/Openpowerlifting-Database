@@ -69,6 +69,31 @@ def plot_histogram(
     plt.show()
 
 
+def plot_scatterplot(
+    *,
+    data: pd.DataFrame,
+    x_column: str,
+    y_column: str,
+    hue: str = None,
+    alpha: float = 0,
+    figsize: tuple[int, int] = (8, 6),
+    xlabel: str = "default",
+    ylabel: str = "default",
+    title: str = "default",
+) -> None:
+    assert (
+        x_column in data.columns and y_column in data.columns
+    ), "Column not found in dataframe"
+
+    plt.figure(figsize=figsize)
+    sns.scatterplot(x=x_column, y=y_column, hue=hue, data=data, alpha=alpha)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.title(title)
+
+    plt.show()
+
+
 def show_column_stats(*, data: pd.DataFrame, column: str, hue: str = None) -> None:
     """Gives a general overview of a column"""
     assert column in data.columns, "column not found in dataframe"
