@@ -6,7 +6,7 @@ import time
 
 @dataclass
 class Configuration:
-    file_name: str = "powerlifting.csv"
+    file_name: str = "default.csv"
     number_of_threads: int = 1
     number_of_examples: int = 452785
     step_size: int = 100

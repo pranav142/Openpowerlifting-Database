@@ -75,8 +75,9 @@ def plot_scatterplot(
     x_column: str,
     y_column: str,
     hue: str = None,
-    alpha: float = 0,
-    figsize: tuple[int, int] = (8, 6),
+    aspect: int = 2,
+    height: int = 7,
+    markers: str = "o",
     xlabel: str = "default",
     ylabel: str = "default",
     title: str = "default",
@@ -85,8 +86,15 @@ def plot_scatterplot(
         x_column in data.columns and y_column in data.columns
     ), "Column not found in dataframe"
 
-    plt.figure(figsize=figsize)
-    sns.scatterplot(x=x_column, y=y_column, hue=hue, data=data, alpha=alpha)
+    sns.lmplot(
+        x=x_column,
+        y=y_column,
+        hue=hue,
+        data=data,
+        aspect=aspect,
+        height=height,
+        markers=markers,
+    )
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.title(title)
