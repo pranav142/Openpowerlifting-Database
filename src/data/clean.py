@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import functools
-from typing import Callable
+from typing import Callable, Optional
 import os
 
 
@@ -49,11 +49,27 @@ def rename_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def create_strength_per_bodyweight(df: pd.DataFrame, column: str) -> pd.DataFrame:
+    """Creates a column showing relation between bodyweight and strength"""
+    assert column in df.columns, f"{column} not found in columns"
+    is_numeric = pd.to_numeric(df[column], errors="coerce").notnull().all()
+    df[f"{column}_Per_Body_Weight"] = df[column] / df["Weight"]
+    return df
+
+
 def process_data(raw_df_path: str) -> pd.DataFrame:
     """chains preprocessing steps on the data to return final transformed dataframe"""
     raw_data = pd.read_csv(raw_df_path)
     data_processing = compose(
-        rename_columns, clean_class_column, clean_age_column, sort_df, convert_date
+        rename_columns,
+        clean_class_column,
+        clean_age_column,
+        sort_df,
+        convert_date,
+        functools.partial(create_strength_per_bodyweight, column="Bench"),
+        functools.partial(create_strength_per_bodyweight, column="Squat"),
+        functools.partial(create_strength_per_bodyweight, column="Deadlift"),
+        functools.partial(create_strength_per_bodyweight, column="Total"),
     )
     processed_df = data_processing(raw_data)
     return processed_df
@@ -77,6 +93,6 @@ def main(raw_df_path: str, save_df_path: str) -> None:
 
 
 if __name__ == "__main__":
-    RAW_DF_PATH = "././data/raw/openpowerlifting.csv"
-    SAVE_DF_PATH = "././data/processed/processed_lifting_data.csv"
+    RAW_DF_PATH = "..\\..\\data\\raw\\openpowerlifting.csv"
+    SAVE_DF_PATH = "..\\..\\data\\processed\\processed_lifting_data.csv"
     main(RAW_DF_PATH, SAVE_DF_PATH)
