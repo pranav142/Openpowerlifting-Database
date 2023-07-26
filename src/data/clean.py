@@ -57,6 +57,12 @@ def create_strength_per_bodyweight(df: pd.DataFrame, column: str) -> pd.DataFram
     return df
 
 
+def create_ID_column(df: pd.DataFrame) -> pd.DataFrame:
+    """Creates a unique ID for every person"""
+    df["ID"] = pd.factorize(df["Name"])[0]
+    return df
+
+
 def process_data(raw_df_path: str) -> pd.DataFrame:
     """chains preprocessing steps on the data to return final transformed dataframe"""
     raw_data = pd.read_csv(raw_df_path)
@@ -70,6 +76,7 @@ def process_data(raw_df_path: str) -> pd.DataFrame:
         functools.partial(create_strength_per_bodyweight, column="Squat"),
         functools.partial(create_strength_per_bodyweight, column="Deadlift"),
         functools.partial(create_strength_per_bodyweight, column="Total"),
+        create_ID_column,
     )
     processed_df = data_processing(raw_data)
     return processed_df

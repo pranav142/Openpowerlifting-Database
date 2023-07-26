@@ -5,3 +5,4 @@ PowerLifting.code-workspace
 __pycache__
 tests/*.coverage
 tests/.pytest_cache
+.env
