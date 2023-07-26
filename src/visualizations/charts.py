@@ -80,11 +80,14 @@ def plot_scatterplot(
     markers: str = "o",
     xlabel: str = "default",
     ylabel: str = "default",
-    title: str = "default",
+    title: str = None,
 ) -> None:
     assert (
         x_column in data.columns and y_column in data.columns
     ), "Column not found in dataframe"
+
+    if title is None:
+        title = f"Correlation Between {x_column} and {y_column}; Correlation Coeffecient: {data[x_column].corr(data[y_column]) :.3f}"
 
     sns.lmplot(
         x=x_column,

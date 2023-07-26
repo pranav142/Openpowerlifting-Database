@@ -5,7 +5,8 @@ from threading import Thread, current_thread, Lock
 from multiprocessing import current_process
 from payload import Payload
 from config import Configuration
-from functools import wraps
+from utils import timeit
+
 
 NUMBER = 1
 NAME = 2
@@ -25,19 +26,6 @@ BENCH = 20
 DEADLIFT = 21
 TOTAL = 22
 DOTS = 23
-
-
-def timeit(func):
-    @wraps(func)
-    def timeit_wrapper(*args, **kwargs):
-        start_time = time.perf_counter()
-        result = func(*args, **kwargs)
-        end_time = time.perf_counter()
-        total_time = end_time - start_time
-        print(f"Function {func.__name__} Took {total_time:.4f} seconds to execute")
-        return result
-
-    return timeit_wrapper
 
 
 def get_powerlifting_data(start: int, end: int) -> Payload:
