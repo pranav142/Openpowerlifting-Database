@@ -3,6 +3,6 @@ scratch.py
 scratch2.py
 PowerLifting.code-workspace
 __pycache__
-tests/*.coverage
-tests/.pytest_cache
+*.coverage
 .env
+.pytest_cache
