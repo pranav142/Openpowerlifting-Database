@@ -19,54 +19,44 @@ mysql = MySQL(app)
 POUNDS_TO_KILOS_COEF = 0.45
 POUNDS_TO_POUNDS_COEF = 1
 
+ALL_TABLES = ["competitors", "competitions"]
+
 
 class units(Enum):
     pounds = ("(lbs)", POUNDS_TO_POUNDS_COEF)
     kilos = ("(kgs)", POUNDS_TO_KILOS_COEF)
 
 
-def format_competitor_data(competitor_data: tuple) -> dict:
-    formated_data = []
-    for competitor in competitor_data:
-        formated_data.append(
-            {
-                "ID": competitor[0],
-                "Name": competitor[1],
-                "Instagram_Handle": competitor[2],
-                "Origin": competitor[3],
-                "Gender": competitor[4],
-            }
-        )
-    return formated_data
+def convert_pounds(pounds: int, desired_units: units, precision: int = 3) -> float:
+    if pounds is None:
+        return None
+    return round(pounds * desired_units.value[1], precision)
 
 
-def format_competitions_data(
-    competiton_data: tuple, units: units = units.pounds
-) -> dict:
+def format_data(data: tuple, units: units) -> dict:
     UNIT_NAME = 0
-    UNIT_CONVERSION_COEFFECIENT = 1
     formated_data = []
-    for competition in competiton_data:
+    for row in data:
         formated_data.append(
             {
-                "ID": competition[0],
-                "Competition_Date": competition[1],
-                "Competition_Country": competition[2],
-                "Competition_City": competition[3],
-                "Equipment": competition[4],
-                "Age": competition[5],
-                f"Weight{units.value[UNIT_NAME]}": competition[6]
-                * units.value[UNIT_CONVERSION_COEFFECIENT],
-                "Class": competition[7],
-                f"Squat{units.value[UNIT_NAME]}": competition[8]
-                * units.value[UNIT_CONVERSION_COEFFECIENT],
-                f"Bench{units.value[UNIT_NAME]}": competition[9]
-                * units.value[UNIT_CONVERSION_COEFFECIENT],
-                f"Deadlift{units.value[UNIT_NAME]}": competition[10]
-                * units.value[UNIT_CONVERSION_COEFFECIENT],
-                f"Total{units.value[UNIT_NAME]}": competition[11]
-                * units.value[UNIT_CONVERSION_COEFFECIENT],
-                "Dots": competition[12],
+                "ID": row[0],
+                "Name": row[1],
+                "Instagram_Handle": row[2],
+                "Origin": row[3],
+                "Gender": row[4],
+                "ID": row[5],
+                "Competition_Date": row[6],
+                "Competition_Country": row[7],
+                "Competition_City/State": row[8],
+                "Equipment": row[9],
+                "Age": row[10],
+                f"Weight{units.value[UNIT_NAME]}": convert_pounds(row[11], units),
+                "Class": row[12],
+                f"Squat{units.value[UNIT_NAME]}": convert_pounds(row[13], units),
+                f"Bench{units.value[UNIT_NAME]}": convert_pounds(row[14], units),
+                f"Deadlift{units.value[UNIT_NAME]}": convert_pounds(row[15], units),
+                f"Total{units.value[UNIT_NAME]}": convert_pounds(row[16], units),
+                "Dots": row[17],
             }
         )
     return formated_data
@@ -80,20 +70,42 @@ def execute_sql_query(query: str) -> tuple:
     return data
 
 
+def generate_select_range_query(
+    start_index: int,
+    end_index: int,
+    column: str = f"{ALL_TABLES[0]}.id",
+    tables: list = ALL_TABLES,
+) -> str:
+    table_names = ", ".join(tables)
+    table_id_conditions = " AND ".join(
+        f"{table}.id = {tables[0]}.id" for table in tables[1:]
+    )
+    sql_query = f"SELECT * FROM {table_names} WHERE {table_id_conditions} AND {tables[0]}.id BETWEEN {start_index} AND {end_index} ORDER BY {column} DESC"
+    return sql_query
+
+
 def select_range_data(
-    table: str, start_index: int, end_index: int, max: int = 100
-) -> tuple:
+    start_index: int,
+    end_index: int,
+    max: int = 100,
+    column: str = f"{ALL_TABLES[0]}.id",
+    tables: list = ALL_TABLES,
+) -> list:
     if end_index - start_index > max:
         end_index = start_index + max
     if start_index > end_index:
         end_index = start_index
-    return execute_sql_query(
-        f"SELECT {table}.* FROM {table} WHERE {table}.id BETWEEN {start_index} AND {end_index}"
-    )
+    sql_query = generate_select_range_query(start_index, end_index, column, tables)
+    result = execute_sql_query(sql_query)
+    return result
 
 
-def select_record_id(table: str, id: int) -> tuple:
-    return execute_sql_query(f"SELECT {table}.* FROM {table} WHERE {table}.id = {id}")
+def select_record_id(id: int, tables: list = ALL_TABLES) -> tuple:
+    table_names = ", ".join(tables)
+    join_conditions = " AND ".join(f"{table}.id = {id}" for table in tables)
+    sql_query = f"SELECT * FROM {table_names} WHERE {join_conditions}"
+    result = execute_sql_query(sql_query)
+    return result
 
 
 def get_units() -> units:
@@ -107,21 +119,25 @@ def get_start_and_end_index() -> tuple[int, int]:
     return start_index, end_index
 
 
+def get_column_to_order_by() -> str:
+    return request.args.get("orderby", f"{ALL_TABLES[0]}.id")
+
+
 @app.route("/api/rankings")
 def get_range_records() -> Response:
     start_index, end_index = get_start_and_end_index()
     units = get_units()
-    data = select_range_data("competitions", start_index, end_index)
-    formated_data = format_competitions_data(data, units)
+    order_column = get_column_to_order_by()
+    data = select_range_data(start_index, end_index, column=order_column)
+    formated_data = format_data(data, units)
     return jsonify(formated_data)
 
 
 @app.route("/api/<int:id>")
 def get_record_from_id(id: int) -> Response:
-    data = select_record_id("competitors", id)
-    if not data:
-        abort(404, description="Record not found. Please enter a valid id")
-    formated_data = format_competitor_data(data)
+    units = get_units
+    data = select_record_id(id)
+    formated_data = format_data(data, units)
     return jsonify(formated_data)
 
 
