@@ -31,6 +31,12 @@ def format_competitor_data(competitor_data: tuple) -> dict:
     return formated_data
 
 
+def format_competitions_data(competiton_data: tuple) -> dict:
+    formated_data = []
+    for competition in competiton_data:
+        formated_data.append()
+
+
 def execute_sql_query(query: str) -> tuple:
     cur = mysql.connection.cursor()
     cur.execute(query)
@@ -39,18 +45,23 @@ def execute_sql_query(query: str) -> tuple:
     return data
 
 
-def select_all_data(table: str) -> tuple:
-    return execute_sql_query(f"SELECT * FROM {table}")
+def select_range_data(table: str, start_index: int, end_index: int) -> tuple:
+    return execute_sql_query(
+        f"SELECT {table}.* FROM {table} WHERE {table}.id BETWEEN {start_index} AND {end_index}"
+    )
 
 
 def select_record_id(table: str, id: int):
     return execute_sql_query(f"SELECT {table}.* FROM {table} WHERE {table}.id = {id}")
 
 
-@app.route("/api/")
-def get_all_records() -> Response:
-    data = select_all_data("competitors")
-    return jsonify(data)
+@app.route("/api/rankings")
+def get_range_records() -> Response:
+    start_index = int(request.args.get("start", 0))
+    end_index = int(request.args.get("end", 10))
+    data = select_range_data("competitors", start_index, end_index)
+    formated_data = format_competitor_data(data)
+    return jsonify(formated_data)
 
 
 @app.route("/api/<int:id>")
