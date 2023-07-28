@@ -62,9 +62,58 @@ def format_data(data: tuple, units: units) -> dict:
     return formated_data
 
 
-def execute_sql_query(query: str) -> tuple:
+def format_competitor_data(competitor_data: tuple) -> dict:
+    formated_data = []
+    for competitor in competitor_data:
+        formated_data.append(
+            {
+                "ID": competitor[0],
+                "Name": competitor[1],
+                "Instagram_Handle": competitor[2],
+                "Origin": competitor[3],
+                "Gender": competitor[4],
+            }
+        )
+    return formated_data
+
+
+def format_competitions_data(competiton_data: tuple, units: units) -> dict:
+    UNIT_NAME = 0
+    UNIT_CONVERSION_COEFFECIENT = 1
+    formated_data = []
+    for competition in competiton_data:
+        formated_data.append(
+            {
+                "ID": competition[0],
+                "Competition_Date": competition[1],
+                "Competition_Country": competition[2],
+                "Competition_City": competition[3],
+                "Equipment": competition[4],
+                "Age": competition[5],
+                f"Weight{units.value[UNIT_NAME]}": convert_pounds(
+                    competition[6], units
+                ),
+                "Class": competition[7],
+                f"Squat{units.value[UNIT_NAME]}": convert_pounds(competition[8], units),
+                f"Bench{units.value[UNIT_NAME]}": convert_pounds(competition[9], units),
+                f"Deadlift{units.value[UNIT_NAME]}": convert_pounds(
+                    competition[10], units
+                ),
+                f"Total{units.value[UNIT_NAME]}": convert_pounds(
+                    competition[11], units
+                ),
+                "Dots": competition[12],
+            }
+        )
+    return formated_data
+
+
+def execute_sql_query(query: str, additional_params: tuple = None) -> tuple:
     cur = mysql.connection.cursor()
-    cur.execute(query)
+    if additional_params is None:
+        cur.execute(query)
+    else:
+        cur.execue(query, additional_params)
     data = cur.fetchall()
     cur.close()
     return data
@@ -108,6 +157,32 @@ def select_record_id(id: int, tables: list = ALL_TABLES) -> tuple:
     return result
 
 
+def select_range_data_single_table(
+    table: str, start_index: int, end_index: int
+) -> tuple:
+    return execute_sql_query(
+        f"SELECT {table}.* FROM {table} WHERE {table}.id BETWEEN {start_index} AND {end_index}"
+    )
+
+
+def select_record_id_single_table(table: str, id: int) -> tuple:
+    return execute_sql_query(f"SELECT {table}.* FROM {table} WHERE {table}.id = {id}")
+
+
+def add_competitor_record(table: str, data):
+    insert_query = f"""
+        INSERT INTO {table} (name, age, weight, country)
+        VALUES (%s, %s, %s, %s)
+    """
+
+    name = data.get("name")
+    age = data.get("age")
+    weight = data.get("weight")
+    country = data.get("country")
+
+    return execute_sql_query(insert_query, (name, age, weight, country))
+
+
 def get_units() -> units:
     unit_param = request.args.get("units", "pounds")
     return units[unit_param.lower()]
@@ -135,10 +210,84 @@ def get_range_records() -> Response:
 
 @app.route("/api/<int:id>")
 def get_record_from_id(id: int) -> Response:
-    units = get_units
+    units = get_units()
     data = select_record_id(id)
     formated_data = format_data(data, units)
     return jsonify(formated_data)
+
+
+@app.route("/api/competitor/<int:id>")
+def get_competitor_from_id(id: int) -> Response:
+    data = select_record_id_single_table("competitors", id)
+    formated_data = format_competitor_data(data)
+    return jsonify(formated_data)
+
+
+@app.route("/api/competitor")
+def get_range_competitors() -> Response:
+    start_index, end_index = get_start_and_end_index()
+    data = select_range_data_single_table("competitors", start_index, end_index)
+    formated_data = format_competitor_data(data)
+    return jsonify(formated_data)
+
+
+@app.route("/api/competition/<int:id>")
+def get_competition_from_id(id: int) -> Response:
+    data = select_record_id_single_table("competitions", id)
+    units = get_units()
+    formated_data = format_competitions_data(data, units)
+    return jsonify(formated_data)
+
+
+@app.route("/api/competition")
+def get_range_competitions() -> Response:
+    start_index, end_index = get_start_and_end_index()
+    units = get_units()
+    data = select_range_data_single_table("competitions", start_index, end_index)
+    formated_data = format_competitions_data(data, units)
+    return jsonify(formated_data)
+
+
+@app.route("/api/add-competitor", methods=["POST"])
+def post_competitor_record() -> Response:
+    data = request.json
+    response_data = {"message": "POST request successful!", "data": data}
+    return jsonify(response_data)
+
+
+@app.route("/api/add-competition", methods=["POST"])
+def post_competition_record() -> Response:
+    data = request.json
+    response_data = {"message": "POST request successful!", "data": data}
+    return jsonify(response_data)
+
+
+@app.route("/api/<int:id>/delete-competitor", methods=["DELETE"])
+def delete_competitor_record() -> Response:
+    data = request.json
+    response_data = {"message": "POST request successful!", "data": data}
+    return jsonify(response_data)
+
+
+@app.route("/api/<int:id>/delete-competition", methods=["DELETE"])
+def delete_competition_record() -> Response:
+    data = request.json
+    response_data = {"message": "POST request successful!", "data": data}
+    return jsonify(response_data)
+
+
+@app.route("/api/<int:id>/update-competitor", methods=["PUT"])
+def update_competitor_record() -> Response:
+    data = request.json
+    response_data = {"message": "POST request successful!", "data": data}
+    return jsonify(response_data)
+
+
+@app.route("/api/<int:id>/update-competition", methods=["PUt"])
+def update_competition_record() -> Response:
+    data = request.json
+    response_data = {"message": "POST request successful!", "data": data}
+    return jsonify(response_data)
 
 
 if __name__ == "__main__":
