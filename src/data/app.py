@@ -22,18 +22,36 @@ POUNDS_TO_POUNDS_COEF = 1
 ALL_TABLES = ["competitors", "competitions"]
 
 
-class units(Enum):
+class Units(Enum):
     pounds = ("(lbs)", POUNDS_TO_POUNDS_COEF)
     kilos = ("(kgs)", POUNDS_TO_KILOS_COEF)
 
 
-def convert_pounds(pounds: int, desired_units: units, precision: int = 3) -> float:
+class Tables(Enum):
+    competitiors = ("competitors",)
+    competitions = ("competitions",)
+
+    # TODO: Create a function that will generate all of the columns for each of the tables
+    @classmethod
+    def get_table_columns(cls):
+        columns = execute_sql_query(f"SHOW COLUMNS FROM competitors")
+        return columns
+
+    @classmethod
+    def get_all_tables(cls):
+        return [table.value[0] for table in cls]
+
+    def __len__(self):
+        return len(self.get_all_tables())
+
+
+def convert_pounds(pounds: int, desired_units: Units, precision: int = 3) -> float:
     if pounds is None:
         return None
     return round(pounds * desired_units.value[1], precision)
 
 
-def format_data(data: tuple, units: units) -> dict:
+def format_data(data: tuple, units: Units) -> dict:
     UNIT_NAME = 0
     formated_data = []
     for row in data:
@@ -77,9 +95,8 @@ def format_competitor_data(competitor_data: tuple) -> dict:
     return formated_data
 
 
-def format_competitions_data(competiton_data: tuple, units: units) -> dict:
+def format_competitions_data(competiton_data: tuple, units: Units) -> dict:
     UNIT_NAME = 0
-    UNIT_CONVERSION_COEFFECIENT = 1
     formated_data = []
     for competition in competiton_data:
         formated_data.append(
@@ -169,23 +186,75 @@ def select_record_id_single_table(table: str, id: int) -> tuple:
     return execute_sql_query(f"SELECT {table}.* FROM {table} WHERE {table}.id = {id}")
 
 
-def add_competitor_record(table: str, data):
+# TODO: Test that This works then remove once General function has been Created
+def add_competitor_record(table: str, data) -> tuple:
     insert_query = f"""
-        INSERT INTO {table} (name, age, weight, country)
+        INSERT INTO {table} (Name, Instagram_Handle, Weight, Country)
         VALUES (%s, %s, %s, %s)
     """
 
-    name = data.get("name")
-    age = data.get("age")
-    weight = data.get("weight")
-    country = data.get("country")
+    name = data.get("Name")
+    age = data.get("Instagram_Handle")
+    weight = data.get("Origin")
+    country = data.get("Gender")
 
     return execute_sql_query(insert_query, (name, age, weight, country))
 
 
-def get_units() -> units:
+# TODO: Test that this works then Remove Once general Function has been created
+def add_competition_record(table: str, data) -> tuple:
+    insert_query = f"""
+        INSERT INTO {table}  (Competition_Date, Competition_Country, Competition_City, Equipment, Age, Weight, Class, Squat, Bench, Deadlift, Total, Dots) VALUES (%s, %s, %s)
+    """
+
+    Competition_Date = data.get("Competition_Date")
+    Competition_Country = data.get("Competition_Country")
+    Competition_City = data.get("Competition_City")
+    Equipment = data.get("Equipment")
+    Age = data.get("Age")
+    Weight = data.get("Weight")
+    Class = data.get("Class")
+    Squat = data.get("Squat")
+    Bench = data.get("Bench")
+    Deadlift = data.get("Deadlift")
+    Total = data.get("Total")
+    Dots = data.get("Dots")
+
+    return execute_sql_query(
+        insert_query,
+        (
+            Competition_Date,
+            Competition_Country,
+            Competition_City,
+            Equipment,
+            Age,
+            Weight,
+            Class,
+            Squat,
+            Bench,
+            Deadlift,
+            Total,
+            Dots,
+        ),
+    )
+
+
+# TODO: Fix This, ensure data and table have same columns
+def add_competition_record(table: str, data) -> tuple:
+    columns = ", ".join(data.keys())
+    values_placeholder = ", ".join(["%s"] * len(data))
+    insert_query = f"INSERT INTO {table} ({columns}) VALUES ({values_placeholder})"
+
+    return execute_sql_query(insert_query, tuple(data.values()))
+
+
+def delete_record(table: str, id: int) -> tuple:
+    pass
+
+
+def get_units() -> Units:
     unit_param = request.args.get("units", "pounds")
-    return units[unit_param.lower()]
+    return Units[unit_param.lower()]
 
 
 def get_start_and_end_index() -> tuple[int, int]:
@@ -218,7 +287,7 @@ def get_record_from_id(id: int) -> Response:
 
 @app.route("/api/competitor/<int:id>")
 def get_competitor_from_id(id: int) -> Response:
-    data = select_record_id_single_table("competitors", id)
+    data = select_record_id_single_table(Tables.competitiors.value[0], id)
     formated_data = format_competitor_data(data)
     return jsonify(formated_data)
 
@@ -226,14 +295,16 @@ def get_competitor_from_id(id: int) -> Response:
 @app.route("/api/competitor")
 def get_range_competitors() -> Response:
     start_index, end_index = get_start_and_end_index()
-    data = select_range_data_single_table("competitors", start_index, end_index)
+    data = select_range_data_single_table(
+        Tables.competitiors.value[0], start_index, end_index
+    )
     formated_data = format_competitor_data(data)
     return jsonify(formated_data)
 
 
 @app.route("/api/competition/<int:id>")
 def get_competition_from_id(id: int) -> Response:
-    data = select_record_id_single_table("competitions", id)
+    data = select_record_id_single_table(Tables.competitions.value[0], id)
     units = get_units()
     formated_data = format_competitions_data(data, units)
     return jsonify(formated_data)
@@ -243,22 +314,28 @@ def get_competition_from_id(id: int) -> Response:
 def get_range_competitions() -> Response:
     start_index, end_index = get_start_and_end_index()
     units = get_units()
-    data = select_range_data_single_table("competitions", start_index, end_index)
+    data = select_range_data_single_table(
+        Tables.competitions.value[0], start_index, end_index
+    )
     formated_data = format_competitions_data(data, units)
     return jsonify(formated_data)
 
 
 @app.route("/api/add-competitor", methods=["POST"])
 def post_competitor_record() -> Response:
-    data = request.json
-    response_data = {"message": "POST request successful!", "data": data}
+    units = get_units()
+    data = add_competitor_record(Tables.competitiors.value[0], request.json)
+    formated_data = format_competitor_data(data, units)
+    response_data = {"message": "POST request successful!", "data": formated_data}
     return jsonify(response_data)
 
 
 @app.route("/api/add-competition", methods=["POST"])
 def post_competition_record() -> Response:
-    data = request.json
-    response_data = {"message": "POST request successful!", "data": data}
+    units = get_units()
+    data = add_competition_record(Tables.competitions.value[0], request.json)
+    formated_data = format_competitions_data(data, units)
+    response_data = {"message": "POST request successful!", "data": formated_data}
     return jsonify(response_data)
 
 
@@ -291,4 +368,5 @@ def update_competition_record() -> Response:
 
 
 if __name__ == "__main__":
+    all_tables = Tables.get_all_tables()
     app.run(debug=True)
