@@ -249,7 +249,8 @@ def add_competition_record(table: str, data) -> tuple:
 
 
 def delete_record(table: str, id: int) -> tuple:
-    pass
+    sql_query = f"DELETE FROM {table }WHERE id = {id};"
+    return execute_sql_query(sql_query)
 
 
 def get_units() -> Units:
@@ -340,15 +341,17 @@ def post_competition_record() -> Response:
 
 
 @app.route("/api/<int:id>/delete-competitor", methods=["DELETE"])
-def delete_competitor_record() -> Response:
+def delete_competitor_record(id) -> Response:
     data = request.json
+    delete_record(Tables.competitiors.value[0], id)
     response_data = {"message": "POST request successful!", "data": data}
     return jsonify(response_data)
 
 
 @app.route("/api/<int:id>/delete-competition", methods=["DELETE"])
-def delete_competition_record() -> Response:
+def delete_competition_record(id) -> Response:
     data = request.json
+    delete_record(Tables.competitions.value[0], id)
     response_data = {"message": "POST request successful!", "data": data}
     return jsonify(response_data)
 
