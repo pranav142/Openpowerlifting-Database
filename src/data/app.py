@@ -340,6 +340,7 @@ def post_competition_record() -> Response:
     return jsonify(response_data)
 
 
+# TODO: Combine delete competitor and delete competition so user cannot just delete one and make database unusable
 @app.route("/api/<int:id>/delete-competitor", methods=["DELETE"])
 def delete_competitor_record(id) -> Response:
     data = request.json
@@ -371,5 +372,4 @@ def update_competition_record() -> Response:
 
 
 if __name__ == "__main__":
-    all_tables = Tables.get_all_tables()
     app.run(debug=True)
