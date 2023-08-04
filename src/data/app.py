@@ -248,9 +248,20 @@ def add_competition_record(table: str, data) -> tuple:
     return execute_sql_query(insert_query, tuple(data.values()))
 
 
+def update_record(table: str, id: int, column: str, value: any) -> tuple:
+    sql_query = f"UPDATE {table} SET {column} = {value} WHERE ID = {id}"
+    return execute_sql_query(sql_query)
+
+
 def delete_record(table: str, id: int) -> tuple:
     sql_query = f"DELETE FROM {table }WHERE id = {id};"
     return execute_sql_query(sql_query)
+
+
+def get_update_values() -> tuple[str, any]:
+    column = request.args.get("column")
+    value = request.args.get("value")
+    return column, value
 
 
 def get_units() -> Units:
@@ -358,15 +369,19 @@ def delete_competition_record(id) -> Response:
 
 
 @app.route("/api/<int:id>/update-competitor", methods=["PUT"])
-def update_competitor_record() -> Response:
+def update_competitor_record(id) -> Response:
     data = request.json
+    column_name, value = get_update_values()
+    update_record(Tables.competitiors.value[0], id, column_name, value)
     response_data = {"message": "POST request successful!", "data": data}
     return jsonify(response_data)
 
 
 @app.route("/api/<int:id>/update-competition", methods=["PUt"])
-def update_competition_record() -> Response:
+def update_competition_record(id) -> Response:
     data = request.json
+    column_name, value = get_update_values()
+    update_record(Tables.competitiors.value[0], id, column_name, value)
     response_data = {"message": "POST request successful!", "data": data}
     return jsonify(response_data)
 
