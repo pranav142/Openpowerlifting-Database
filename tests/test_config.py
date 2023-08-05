@@ -46,7 +46,7 @@ def test_steps():
 
 def test_save_path():
     config = Configuration(file_name="data.csv", folder_dir="C:\\")
-    current_time = time.strftime("%Y-%m-%d", time.localtime())
+    current_time = time.strftime("[%Y-%m-%d]", time.localtime())
     expected_save_path = f"C:\\{current_time}_data.csv"
     assert config.save_path == expected_save_path
 

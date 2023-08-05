@@ -89,7 +89,7 @@ def main():
         password=os.getenv("MY_SQL_PASSWORD"),
     )
 
-    database_name = "openpowerlifting"
+    database_name = "test"
 
     with MySQL(sql_instance) as sql_connection:
         create_database(sql_connection, database_name)

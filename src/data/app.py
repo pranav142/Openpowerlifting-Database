@@ -11,15 +11,13 @@ load_dotenv()
 
 app.config["MYSQL_USER"] = os.getenv("MY_SQL_USER")
 app.config["MYSQL_PASSWORD"] = os.getenv("MY_SQL_PASSWORD")
-app.config["MYSQL_DB"] = "openpowerlifting"
+app.config["MYSQL_DB"] = "test"
 app.config["MYSQL_HOST"] = os.getenv("MY_SQL_HOST")
 
 mysql = MySQL(app)
 
 POUNDS_TO_KILOS_COEF = 0.45
 POUNDS_TO_POUNDS_COEF = 1
-
-ALL_TABLES = ["competitors", "competitions"]
 
 
 class Units(Enum):
@@ -28,21 +26,12 @@ class Units(Enum):
 
 
 class Tables(Enum):
-    competitiors = ("competitors",)
-    competitions = ("competitions",)
-
-    # TODO: Create a function that will generate all of the columns for each of the tables
-    @classmethod
-    def get_table_columns(cls):
-        columns = execute_sql_query(f"SHOW COLUMNS FROM competitors")
-        return columns
+    competitors = "competitors"
+    competitions = "competitions"
 
     @classmethod
     def get_all_tables(cls):
-        return [table.value[0] for table in cls]
-
-    def __len__(self):
-        return len(self.get_all_tables())
+        return [table.value for table in cls]
 
 
 def convert_pounds(pounds: int, desired_units: Units, precision: int = 3) -> float:
@@ -139,8 +128,8 @@ def execute_sql_query(query: str, additional_params: tuple = None) -> tuple:
 def generate_select_range_query(
     start_index: int,
     end_index: int,
-    column: str = f"{ALL_TABLES[0]}.id",
-    tables: list = ALL_TABLES,
+    column: str = f"{Tables.get_all_tables()[0]}.id",
+    tables: list = Tables.get_all_tables(),
 ) -> str:
     table_names = ", ".join(tables)
     table_id_conditions = " AND ".join(
@@ -154,8 +143,8 @@ def select_range_data(
     start_index: int,
     end_index: int,
     max: int = 100,
-    column: str = f"{ALL_TABLES[0]}.id",
-    tables: list = ALL_TABLES,
+    column: str = f"{Tables.get_all_tables()[0]}.id",
+    tables: list = Tables.get_all_tables(),
 ) -> list:
     if end_index - start_index > max:
         end_index = start_index + max
@@ -166,7 +155,7 @@ def select_range_data(
     return result
 
 
-def select_record_id(id: int, tables: list = ALL_TABLES) -> tuple:
+def select_record_id(id: int, tables: list = Tables.get_all_tables()) -> tuple:
     table_names = ", ".join(tables)
     join_conditions = " AND ".join(f"{table}.id = {id}" for table in tables)
     sql_query = f"SELECT * FROM {table_names} WHERE {join_conditions}"
@@ -239,15 +228,6 @@ def add_competition_record(table: str, data) -> tuple:
     )
 
 
-# TODO: Fix This, ensure data and table have same columns
-def add_competition_record(table: str, data) -> tuple:
-    columns = ", ".join(data.keys())
-    values_placeholder = ", ".join(["%s"] * len(data))
-    insert_query = f"INSERT INTO {table} ({columns}) VALUES ({values_placeholder})"
-
-    return execute_sql_query(insert_query, tuple(data.values()))
-
-
 def update_record(table: str, id: int, column: str, value: any) -> tuple:
     sql_query = f"UPDATE {table} SET {column} = {value} WHERE ID = {id}"
     return execute_sql_query(sql_query)
@@ -276,7 +256,7 @@ def get_start_and_end_index() -> tuple[int, int]:
 
 
 def get_column_to_order_by() -> str:
-    return request.args.get("orderby", f"{ALL_TABLES[0]}.id")
+    return request.args.get("orderby", f"{Tables.get_all_tables()[0]}.id")
 
 
 @app.route("/api/rankings")
@@ -299,7 +279,7 @@ def get_record_from_id(id: int) -> Response:
 
 @app.route("/api/competitor/<int:id>")
 def get_competitor_from_id(id: int) -> Response:
-    data = select_record_id_single_table(Tables.competitiors.value[0], id)
+    data = select_record_id_single_table(Tables.competitors.value, id)
     formated_data = format_competitor_data(data)
     return jsonify(formated_data)
 
@@ -308,7 +288,7 @@ def get_competitor_from_id(id: int) -> Response:
 def get_range_competitors() -> Response:
     start_index, end_index = get_start_and_end_index()
     data = select_range_data_single_table(
-        Tables.competitiors.value[0], start_index, end_index
+        Tables.competitors.value, start_index, end_index
     )
     formated_data = format_competitor_data(data)
     return jsonify(formated_data)
@@ -316,7 +296,7 @@ def get_range_competitors() -> Response:
 
 @app.route("/api/competition/<int:id>")
 def get_competition_from_id(id: int) -> Response:
-    data = select_record_id_single_table(Tables.competitions.value[0], id)
+    data = select_record_id_single_table(Tables.competitions.value, id)
     units = get_units()
     formated_data = format_competitions_data(data, units)
     return jsonify(formated_data)
@@ -327,7 +307,7 @@ def get_range_competitions() -> Response:
     start_index, end_index = get_start_and_end_index()
     units = get_units()
     data = select_range_data_single_table(
-        Tables.competitions.value[0], start_index, end_index
+        Tables.competitions.value, start_index, end_index
     )
     formated_data = format_competitions_data(data, units)
     return jsonify(formated_data)
@@ -336,7 +316,7 @@ def get_range_competitions() -> Response:
 @app.route("/api/add-competitor", methods=["POST"])
 def post_competitor_record() -> Response:
     units = get_units()
-    data = add_competitor_record(Tables.competitiors.value[0], request.json)
+    data = add_competitor_record(Tables.competitors.value, request.json)
     formated_data = format_competitor_data(data, units)
     response_data = {"message": "POST request successful!", "data": formated_data}
     return jsonify(response_data)
@@ -345,25 +325,17 @@ def post_competitor_record() -> Response:
 @app.route("/api/add-competition", methods=["POST"])
 def post_competition_record() -> Response:
     units = get_units()
-    data = add_competition_record(Tables.competitions.value[0], request.json)
+    data = add_competition_record(Tables.competitions.value, request.json)
     formated_data = format_competitions_data(data, units)
     response_data = {"message": "POST request successful!", "data": formated_data}
     return jsonify(response_data)
 
 
-# TODO: Combine delete competitor and delete competition so user cannot just delete one and make database unusable
-@app.route("/api/<int:id>/delete-competitor", methods=["DELETE"])
+@app.route("/api/<int:id>/delete-record", methods=["DELETE"])
 def delete_competitor_record(id) -> Response:
     data = request.json
-    delete_record(Tables.competitiors.value[0], id)
-    response_data = {"message": "POST request successful!", "data": data}
-    return jsonify(response_data)
-
-
-@app.route("/api/<int:id>/delete-competition", methods=["DELETE"])
-def delete_competition_record(id) -> Response:
-    data = request.json
-    delete_record(Tables.competitions.value[0], id)
+    for table in Tables:
+        delete_record(table.value, id)
     response_data = {"message": "POST request successful!", "data": data}
     return jsonify(response_data)
 
@@ -372,7 +344,7 @@ def delete_competition_record(id) -> Response:
 def update_competitor_record(id) -> Response:
     data = request.json
     column_name, value = get_update_values()
-    update_record(Tables.competitiors.value[0], id, column_name, value)
+    update_record(Tables.competitors.value, id, column_name, value)
     response_data = {"message": "POST request successful!", "data": data}
     return jsonify(response_data)
 
@@ -381,10 +353,11 @@ def update_competitor_record(id) -> Response:
 def update_competition_record(id) -> Response:
     data = request.json
     column_name, value = get_update_values()
-    update_record(Tables.competitiors.value[0], id, column_name, value)
+    update_record(Tables.competitions.value, id, column_name, value)
     response_data = {"message": "POST request successful!", "data": data}
     return jsonify(response_data)
 
 
 if __name__ == "__main__":
+    print(Tables.get_all_tables())
     app.run(debug=True)
