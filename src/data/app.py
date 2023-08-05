@@ -349,7 +349,7 @@ def update_competitor_record(id) -> Response:
     return jsonify(response_data)
 
 
-@app.route("/api/<int:id>/update-competition", methods=["PUt"])
+@app.route("/api/<int:id>/update-competition", methods=["PUT"])
 def update_competition_record(id) -> Response:
     data = request.json
     column_name, value = get_update_values()

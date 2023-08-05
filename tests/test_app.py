@@ -1,13 +1,27 @@
 import pytest
 import requests
+from requests import Response
 
 server_url = "http://127.0.0.1:5000"
 
 
+def create_api_url(endpoint: str, server_url: str = server_url) -> str:
+    return server_url + endpoint
+
+
+def get_api_response(api_url: str) -> Response:
+    return requests.get(api_url)
+
+
+def get_response_from_endpoint(endpoint: str, server_url: str = server_url) -> Response:
+    api_url = create_api_url(endpoint, server_url)
+    return get_api_response(api_url)
+
+
 # /api/rankings
 def test_get_range_records() -> None:
-    api_url = server_url + "/api/rankings"
-    response = requests.get(api_url)
+    endpoint = "/api/rankings"
+    response = get_response_from_endpoint(endpoint, server_url)
     print(response.content.decode())
 
 
