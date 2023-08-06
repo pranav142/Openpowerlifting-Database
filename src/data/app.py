@@ -128,14 +128,14 @@ def execute_sql_query(query: str, additional_params: tuple = None) -> tuple:
 def generate_select_range_query(
     start_index: int,
     end_index: int,
-    column: str = f"{Tables.get_all_tables()[0]}.id",
+    orderby_column: str = f"{Tables.get_all_tables()[0]}.id",
     tables: list = Tables.get_all_tables(),
 ) -> str:
     table_names = ", ".join(tables)
     table_id_conditions = " AND ".join(
         f"{table}.id = {tables[0]}.id" for table in tables[1:]
     )
-    sql_query = f"SELECT * FROM {table_names} WHERE {table_id_conditions} AND {tables[0]}.id BETWEEN {start_index} AND {end_index} ORDER BY {column} DESC"
+    sql_query = f"SELECT * FROM {table_names} WHERE {table_id_conditions} AND {tables[0]}.id BETWEEN {start_index} AND {end_index} ORDER BY {orderby_column} DESC"
     return sql_query
 
 
@@ -143,14 +143,16 @@ def select_range_data(
     start_index: int,
     end_index: int,
     max: int = 100,
-    column: str = f"{Tables.get_all_tables()[0]}.id",
+    orderby_column: str = f"{Tables.get_all_tables()[0]}.id",
     tables: list = Tables.get_all_tables(),
 ) -> list:
     if end_index - start_index > max:
         end_index = start_index + max
     if start_index > end_index:
         end_index = start_index
-    sql_query = generate_select_range_query(start_index, end_index, column, tables)
+    sql_query = generate_select_range_query(
+        start_index, end_index, orderby_column, tables
+    )
     result = execute_sql_query(sql_query)
     return result
 
@@ -264,7 +266,7 @@ def get_range_records() -> Response:
     start_index, end_index = get_start_and_end_index()
     units = get_units()
     order_column = get_column_to_order_by()
-    data = select_range_data(start_index, end_index, column=order_column)
+    data = select_range_data(start_index, end_index, orderby_column=order_column)
     formated_data = format_data(data, units)
     return jsonify(formated_data)
 
@@ -359,5 +361,4 @@ def update_competition_record(id) -> Response:
 
 
 if __name__ == "__main__":
-    print(Tables.get_all_tables())
     app.run(debug=True)

@@ -1,28 +1,56 @@
 import pytest
+import sys
 import requests
+import os
 from requests import Response
+from dotenv import load_dotenv
+
+from data import MySQL, MySqlInstance, create_db_with_data
+from data.db_utils import connect_to_MySQL_instance
+
+load_dotenv("../src/data/.env")
 
 server_url = "http://127.0.0.1:5000"
+database_name = "test"
+csv_file = "../data/processed/processed_lifting_data.csv"
+sql_instance = MySqlInstance(
+    host=os.getenv("MY_SQL_HOST"),
+    port=os.getenv("MY_SQL_PORT"),
+    user=os.getenv("MY_SQL_USER"),
+    password=os.getenv("MY_SQL_PASSWORD"),
+)
+# create_db_with_data(database_name, sql_instance, csv_file)
+sql_connection = connect_to_MySQL_instance(sql_instance)
+cursor = sql_connection.cursor()
 
 
 def create_api_url(endpoint: str, server_url: str = server_url) -> str:
     return server_url + endpoint
 
 
-def get_api_response(api_url: str) -> Response:
-    return requests.get(api_url)
+def get_api_response(api_url: str, **kwargs) -> Response:
+    return requests.get(api_url, params=kwargs)
 
 
-def get_response_from_endpoint(endpoint: str, server_url: str = server_url) -> Response:
+def get_response_from_endpoint(
+    endpoint: str, server_url: str = server_url, **kwargs
+) -> Response:
     api_url = create_api_url(endpoint, server_url)
-    return get_api_response(api_url)
+    return get_api_response(api_url, **kwargs)
 
 
 # /api/rankings
 def test_get_range_records() -> None:
     endpoint = "/api/rankings"
-    response = get_response_from_endpoint(endpoint, server_url)
-    print(response.content.decode())
+
+    START = 0
+    END = 3
+    response = get_response_from_endpoint(endpoint, server_url, start=START, end=END)
+    assert response.status_code == 200
+
+    response_data = response.json()
+    assert isinstance(response_data, list)
+    assert len(response_data) == END - START + 1
 
 
 # /api/<int:id>

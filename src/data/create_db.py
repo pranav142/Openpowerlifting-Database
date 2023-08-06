@@ -3,8 +3,8 @@ import mysql.connector
 from mysql.connector.connection import MySQLConnection
 from dotenv import load_dotenv
 import os
-from db_utils import MySqlInstance, MySQL, DatabaseError, connect_to_MySQL_instance
-from utils import timeit
+from data.db_utils import MySqlInstance, MySQL, DatabaseError, connect_to_MySQL_instance
+from data.utils import timeit
 
 
 def create_database(sql_connection: MySQLConnection, database_name: str):
@@ -76,20 +76,10 @@ def populate_tables(
 
 
 @timeit
-def main():
-    csv_file = "../../data/processed/processed_lifting_data.csv"
+def create_db_with_data(
+    database_name: str, sql_instance: MySqlInstance, csv_file: str
+) -> None:
     df = pd.read_csv(csv_file)
-
-    load_dotenv()
-
-    sql_instance = MySqlInstance(
-        host="localhost",
-        port=3306,
-        user="root",
-        password=os.getenv("MY_SQL_PASSWORD"),
-    )
-
-    database_name = "test"
 
     with MySQL(sql_instance) as sql_connection:
         create_database(sql_connection, database_name)
@@ -134,6 +124,23 @@ def main():
             sql_connection,
             database_name,
         )
+
+
+def main() -> None:
+    csv_file = "../../data/processed/processed_lifting_data.csv"
+
+    load_dotenv()
+
+    sql_instance = MySqlInstance(
+        host=os.getenv("MY_SQL_HOST"),
+        port=os.getenv("MY_SQL_PORT"),
+        user=os.getenv("MY_SQL_USER"),
+        password=os.getenv("MY_SQL_PASSWORD"),
+    )
+
+    database_name = "test"
+
+    create_db_with_data(database_name, sql_instance, csv_file)
 
 
 if __name__ == "__main__":

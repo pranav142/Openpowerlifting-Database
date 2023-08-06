@@ -4,8 +4,8 @@ import time, os
 from threading import Thread, current_thread, Lock
 from multiprocessing import current_process
 from payload import Payload
-from config import Configuration
-from utils import timeit
+from data.config import Configuration
+from data.utils import timeit
 
 
 NUMBER = 1
