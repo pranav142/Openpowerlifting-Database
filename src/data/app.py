@@ -19,6 +19,30 @@ mysql = MySQL(app)
 POUNDS_TO_KILOS_COEF = 0.45
 POUNDS_TO_POUNDS_COEF = 1
 
+competitors_columns = [
+    "ID",
+    "Name",
+    "Instagram_Handle",
+    "Origin",
+    "Gender",
+]
+
+competitions_columns = [
+    "ID",
+    "Competition_Date",
+    "Competition_Country",
+    "Competition_City",
+    "Equipment",
+    "Age",
+    "Weight",
+    "Class",
+    "Squat",
+    "Bench",
+    "Deadlift",
+    "Total",
+    "Dots",
+]
+
 
 class Units(Enum):
     pounds = ("(lbs)", POUNDS_TO_POUNDS_COEF)
@@ -26,12 +50,12 @@ class Units(Enum):
 
 
 class Tables(Enum):
-    competitors = "competitors"
-    competitions = "competitions"
+    competitors = ("competitors", competitors_columns)
+    competitions = ("competitions", competitions_columns)
 
     @classmethod
     def get_all_tables(cls):
-        return [table.value for table in cls]
+        return [table.value[0] for table in cls]
 
 
 def convert_pounds(pounds: int, desired_units: Units, precision: int = 3) -> float:
@@ -114,13 +138,16 @@ def format_competitions_data(competiton_data: tuple, units: Units) -> dict:
     return formated_data
 
 
-def execute_sql_query(query: str, additional_params: tuple = None) -> tuple:
-    cur = mysql.connection.cursor()
+def execute_sql_query(
+    query: str, additional_params: tuple = None, connection: MySQL = mysql
+) -> tuple:
+    cur = connection.connection.cursor()
     if additional_params is None:
         cur.execute(query)
     else:
-        cur.execue(query, additional_params)
+        cur.execute(query, additional_params)
     data = cur.fetchall()
+    connection.connection.commit()
     cur.close()
     return data
 
@@ -177,57 +204,15 @@ def select_record_id_single_table(table: str, id: int) -> tuple:
     return execute_sql_query(f"SELECT {table}.* FROM {table} WHERE {table}.id = {id}")
 
 
-# TODO: Test that This works then remove once General function has been Created
-def add_competitor_record(table: str, data) -> tuple:
-    insert_query = f"""
-        INSERT INTO {table} (Name, Instagram_Handle, Weight, Country)
-        VALUES (%s, %s, %s, %s)
-    """
+# TODO: FIx this So User can Add Multiple Competitons But Can't add multiple Competitors With Same ID
+def add_record(data, table: str, columns: list) -> tuple:
+    insert_query = f"""INSERT INTO {table} ({', '.join(columns)}) VALUES ({', '.join(['%s']*len(columns))})"""
 
-    name = data.get("Name")
-    age = data.get("Instagram_Handle")
-    weight = data.get("Origin")
-    country = data.get("Gender")
+    values = []
+    for column in columns:
+        values.append(data.get(column))
 
-    return execute_sql_query(insert_query, (name, age, weight, country))
-
-
-# TODO: Test that this works then Remove Once general Function has been created
-def add_competition_record(table: str, data) -> tuple:
-    insert_query = f"""
-        INSERT INTO {table}  (Competition_Date, Competition_Country, Competition_City, Equipment, Age, Weight, Class, Squat, Bench, Deadlift, Total, Dots) VALUES (%s, %s, %s)
-    """
-
-    Competition_Date = data.get("Competition_Date")
-    Competition_Country = data.get("Competition_Country")
-    Competition_City = data.get("Competition_City")
-    Equipment = data.get("Equipment")
-    Age = data.get("Age")
-    Weight = data.get("Weight")
-    Class = data.get("Class")
-    Squat = data.get("Squat")
-    Bench = data.get("Bench")
-    Deadlift = data.get("Deadlift")
-    Total = data.get("Total")
-    Dots = data.get("Dots")
-
-    return execute_sql_query(
-        insert_query,
-        (
-            Competition_Date,
-            Competition_Country,
-            Competition_City,
-            Equipment,
-            Age,
-            Weight,
-            Class,
-            Squat,
-            Bench,
-            Deadlift,
-            Total,
-            Dots,
-        ),
-    )
+    return execute_sql_query(insert_query, tuple(values))
 
 
 def update_record(table: str, id: int, column: str, value: any) -> tuple:
@@ -236,7 +221,7 @@ def update_record(table: str, id: int, column: str, value: any) -> tuple:
 
 
 def delete_record(table: str, id: int) -> tuple:
-    sql_query = f"DELETE FROM {table }WHERE id = {id};"
+    sql_query = f"DELETE FROM {table} WHERE id = {id};"
     return execute_sql_query(sql_query)
 
 
@@ -281,7 +266,7 @@ def get_record_from_id(id: int) -> Response:
 
 @app.route("/api/competitor/<int:id>")
 def get_competitor_from_id(id: int) -> Response:
-    data = select_record_id_single_table(Tables.competitors.value, id)
+    data = select_record_id_single_table(Tables.competitors.value[0], id)
     formated_data = format_competitor_data(data)
     return jsonify(formated_data)
 
@@ -290,7 +275,7 @@ def get_competitor_from_id(id: int) -> Response:
 def get_range_competitors() -> Response:
     start_index, end_index = get_start_and_end_index()
     data = select_range_data_single_table(
-        Tables.competitors.value, start_index, end_index
+        Tables.competitors.value[0], start_index, end_index
     )
     formated_data = format_competitor_data(data)
     return jsonify(formated_data)
@@ -298,7 +283,7 @@ def get_range_competitors() -> Response:
 
 @app.route("/api/competition/<int:id>")
 def get_competition_from_id(id: int) -> Response:
-    data = select_record_id_single_table(Tables.competitions.value, id)
+    data = select_record_id_single_table(Tables.competitions.value[0], id)
     units = get_units()
     formated_data = format_competitions_data(data, units)
     return jsonify(formated_data)
@@ -309,45 +294,33 @@ def get_range_competitions() -> Response:
     start_index, end_index = get_start_and_end_index()
     units = get_units()
     data = select_range_data_single_table(
-        Tables.competitions.value, start_index, end_index
+        Tables.competitions.value[0], start_index, end_index
     )
     formated_data = format_competitions_data(data, units)
     return jsonify(formated_data)
 
 
-@app.route("/api/add-competitor", methods=["POST"])
+@app.route("/api/add-record", methods=["POST"])
 def post_competitor_record() -> Response:
-    units = get_units()
-    data = add_competitor_record(Tables.competitors.value, request.json)
-    formated_data = format_competitor_data(data, units)
-    response_data = {"message": "POST request successful!", "data": formated_data}
-    return jsonify(response_data)
-
-
-@app.route("/api/add-competition", methods=["POST"])
-def post_competition_record() -> Response:
-    units = get_units()
-    data = add_competition_record(Tables.competitions.value, request.json)
-    formated_data = format_competitions_data(data, units)
-    response_data = {"message": "POST request successful!", "data": formated_data}
+    for table in Tables:
+        add_record(request.json, table=table.value[0], columns=table.value[1])
+    response_data = {"message": "POST request successful!"}
     return jsonify(response_data)
 
 
 @app.route("/api/<int:id>/delete-record", methods=["DELETE"])
 def delete_competitor_record(id) -> Response:
-    data = request.json
     for table in Tables:
-        delete_record(table.value, id)
-    response_data = {"message": "POST request successful!", "data": data}
+        delete_record(table.value[0], id)
+    response_data = {"message": "DELETE request successful!", "id": id}
     return jsonify(response_data)
 
 
 @app.route("/api/<int:id>/update-competitor", methods=["PUT"])
 def update_competitor_record(id) -> Response:
-    data = request.json
     column_name, value = get_update_values()
-    update_record(Tables.competitors.value, id, column_name, value)
-    response_data = {"message": "POST request successful!", "data": data}
+    update_record(Tables.competitors.value[0], id, column_name, value)
+    response_data = {"message": "UPDATE request successful!", "id": id}
     return jsonify(response_data)
 
 
@@ -355,7 +328,7 @@ def update_competitor_record(id) -> Response:
 def update_competition_record(id) -> Response:
     data = request.json
     column_name, value = get_update_values()
-    update_record(Tables.competitions.value, id, column_name, value)
+    update_record(Tables.competitions.value[0], id, column_name, value)
     response_data = {"message": "POST request successful!", "data": data}
     return jsonify(response_data)
 

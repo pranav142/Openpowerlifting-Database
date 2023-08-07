@@ -59,7 +59,7 @@ def create_strength_per_bodyweight(df: pd.DataFrame, column: str) -> pd.DataFram
 
 def create_ID_column(df: pd.DataFrame) -> pd.DataFrame:
     """Creates a unique ID for every person"""
-    df["ID"] = pd.factorize(df["Name"])[0]
+    df["ID"] = pd.factorize(df["Name"])[0] + 1
     return df
 
 
