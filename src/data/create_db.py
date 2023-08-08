@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 from data.db_utils import MySqlInstance, MySQL, DatabaseError, connect_to_MySQL_instance
 from data.utils import timeit
+from tables import Tables
 
 
 def create_database(sql_connection: MySQLConnection, database_name: str):
@@ -21,17 +22,13 @@ def create_database(sql_connection: MySQLConnection, database_name: str):
         cursor.close()
 
 
-def create_tables(sql_connection: MySQLConnection, database_name: str) -> None:
+def create_table(
+    sql_connection: MySQLConnection, database_name: str, table_name: str, columns: list
+) -> None:
     try:
         cursor = sql_connection.cursor()
         cursor.execute(f"USE {database_name}")
-        cursor.execute(
-            "CREATE TABLE competitors (ID INT PRIMARY KEY, Name VARCHAR(255), Instagram_Handle VARCHAR(255), Origin VARCHAR(255), Gender VARCHAR(10))"
-        )
-
-        cursor.execute(
-            "CREATE TABLE competitions (ID INT PRIMARY KEY, Competition_Date DATE, Competition_Country VARCHAR(255), Competition_City VARCHAR(255), Equipment VARCHAR(255), Age INT, Weight FLOAT, Class FLOAT, Squat FLOAT, Bench FLOAT, Deadlift FLOAT, Total FLOAT, Dots FLOAT)"
-        )
+        cursor.execute(f"CREATE TABLE {table_name} ({', '.join(columns)})")
 
         print("Successfully Added Tables")
     except mysql.connector.Error as err:
@@ -43,7 +40,7 @@ def create_tables(sql_connection: MySQLConnection, database_name: str) -> None:
         cursor.close()
 
 
-def populate_tables(
+def populate_table(
     df: pd.DataFrame,
     table_name: str,
     columns: list[str],
@@ -92,53 +89,30 @@ def table_post_processing(database_name: str, sql_connection: MySQLConnection) -
 
 @timeit
 def create_db_with_data(
-    database_name: str, sql_instance: MySqlInstance, csv_file: str
+    database_name: str,
+    sql_instance: MySqlInstance,
+    csv_file: str,
+    tables: Tables,
 ) -> None:
     df = pd.read_csv(csv_file)
 
     with MySQL(sql_instance) as sql_connection:
         create_database(sql_connection, database_name)
-        create_tables(sql_connection, database_name)
+        for table in Tables:
+            create_table(
+                sql_connection,
+                database_name=database_name,
+                table_name=table.value[0],
+                columns=table.value[1].get_all_sql_columns(),
+            )
 
-        columns_to_insert_into_competitors = [
-            "ID",
-            "Name",
-            "Instagram_Handle",
-            "Origin",
-            "Gender",
-        ]
-
-        populate_tables(
-            df,
-            "competitors",
-            columns_to_insert_into_competitors,
-            sql_connection,
-            database_name,
-        )
-
-        columns_to_insert_into_competitions = [
-            "ID",
-            "Competition_Date",
-            "Competition_Country",
-            "Competition_City",
-            "Equipment",
-            "Age",
-            "Weight",
-            "Class",
-            "Squat",
-            "Bench",
-            "Deadlift",
-            "Total",
-            "Dots",
-        ]
-
-        populate_tables(
-            df,
-            "competitions",
-            columns_to_insert_into_competitions,
-            sql_connection,
-            database_name,
-        )
+            populate_table(
+                df,
+                table.value[0],
+                table.value[1].get_all_column_names(),
+                sql_connection,
+                database_name,
+            )
 
         table_post_processing(database_name, sql_connection)
 
@@ -155,9 +129,14 @@ def main() -> None:
         password=os.getenv("MY_SQL_PASSWORD"),
     )
 
-    database_name = "test"
+    database_name = "test_refactor"
 
-    create_db_with_data(database_name, sql_instance, csv_file)
+    create_db_with_data(
+        database_name,
+        sql_instance,
+        csv_file,
+        tables=Tables,
+    )
 
 
 if __name__ == "__main__":
