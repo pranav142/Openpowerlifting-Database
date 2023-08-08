@@ -72,27 +72,11 @@ def populate_table(
     cursor.close()
 
 
-# TODO: Add Query To Ensure Key can Auto Increment
-def table_post_processing(database_name: str, sql_connection: MySQLConnection) -> None:
-    cursor = sql_connection.cursor()
-    cursor.execute(f"USE {database_name}")
-    cursor.execute("SHOW TABLES")
-    tables = [table[0] for table in cursor.fetchall()]
-
-    for table_name in tables:
-        alter_query = f"""ALTER TABLE {database_name}.{table_name}
-                        CHANGE COLUMN `ID` `ID` INT NOT NULL AUTO_INCREMENT ;"""
-        cursor.execute(alter_query)
-    sql_connection.commit()
-    cursor.close()
-
-
 @timeit
 def create_db_with_data(
     database_name: str,
     sql_instance: MySqlInstance,
     csv_file: str,
-    tables: Tables,
 ) -> None:
     df = pd.read_csv(csv_file)
 
@@ -113,8 +97,6 @@ def create_db_with_data(
                 sql_connection,
                 database_name,
             )
-
-        table_post_processing(database_name, sql_connection)
 
 
 def main() -> None:

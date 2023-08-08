@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from data import MySQL, MySqlInstance, create_db_with_data
 from data.db_utils import connect_to_MySQL_instance
 
-load_dotenv("../src/data/.env")
+load_dotenv("../src/server/.env")
 
 server_url = "http://127.0.0.1:5000"
 database_name = "test"
