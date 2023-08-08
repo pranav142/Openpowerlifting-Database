@@ -51,8 +51,3 @@ class Tables(Enum):
     @classmethod
     def get_all_tables(cls):
         return [table.value[0] for table in cls]
-
-
-if __name__ == "__main__":
-    for column in Tables.records.value[1].columns:
-        print(column.is_weight)
