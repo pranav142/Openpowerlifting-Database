@@ -15,15 +15,27 @@ from server.app_utils import (
     delete_record,
     update_record,
 )
+import argparse
 
 app = Flask(__name__)
 
 load_dotenv()
 
-app.config["MYSQL_USER"] = os.getenv("MY_SQL_USER")
-app.config["MYSQL_PASSWORD"] = os.getenv("MY_SQL_PASSWORD")
-app.config["MYSQL_DB"] = os.getenv("MY_SQL_DATABASE")
-app.config["MYSQL_HOST"] = os.getenv("MY_SQL_HOST")
+parser = argparse.ArgumentParser(description="Flask MySQL App")
+parser.add_argument("--user", default=os.getenv("MY_SQL_USER"), help="MySQL user")
+parser.add_argument(
+    "--password", default=os.getenv("MY_SQL_PASSWORD"), help="MySQL password"
+)
+parser.add_argument(
+    "--database", default=os.getenv("MY_SQL_DATABASE"), help="MySQL database name"
+)
+parser.add_argument("--host", default=os.getenv("MY_SQL_HOST"), help="MySQL host")
+args = parser.parse_args()
+
+app.config["MYSQL_USER"] = args.user
+app.config["MYSQL_PASSWORD"] = args.password
+app.config["MYSQL_DB"] = args.database
+app.config["MYSQL_HOST"] = args.host
 
 mysql = MySQL(app)
 
@@ -78,7 +90,7 @@ def update_competitor_record(id) -> Response:
 
 
 def main() -> None:
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=os.getenv("SERVER_PORT", 8080))
 
 
 if __name__ == "__main__":
