@@ -4,28 +4,8 @@ import time, os
 from threading import Thread, current_thread, Lock
 from multiprocessing import current_process
 from payload import Payload
-from data.config import Configuration
 from data.utils import timeit
-
-
-NUMBER = 1
-NAME = 2
-INSTAGRAM = 4
-ORIGIN = 6
-FEDERATION = 8
-COMPETITION_DATE = 9
-COMPETITION_COUNTRY = 10
-COMPETITION_CITY = 11
-GENDER = 13
-EQUIPMENT = 14
-AGE = 15
-WEIGHT = 17
-CLASS_ = 18
-SQUAT = 19
-BENCH = 20
-DEADLIFT = 21
-TOTAL = 22
-DOTS = 23
+from data.scrape_config import Configuration, COLUMN_CONFIG
 
 
 def get_powerlifting_data(start: int, end: int) -> Payload:
@@ -38,26 +18,7 @@ def get_powerlifting_data(start: int, end: int) -> Payload:
 
 
 def row_to_dictionary(row: list):
-    return {
-        "Number": row[NUMBER],
-        "Name": row[NAME],
-        "Instagram Handle": row[INSTAGRAM],
-        "Origin": row[ORIGIN],
-        "Federation": row[FEDERATION],
-        "Competition Date": row[COMPETITION_DATE],
-        "Competition Country": row[COMPETITION_COUNTRY],
-        "Competition City": row[COMPETITION_CITY],
-        "Gender": row[GENDER],
-        "Equipment": row[EQUIPMENT],
-        "Age": row[AGE],
-        "Weight": row[WEIGHT],
-        "Class": row[CLASS_],
-        "Squat": row[SQUAT],
-        "Bench": row[BENCH],
-        "Deadlift": row[DEADLIFT],
-        "Total": row[TOTAL],
-        "Dots": row[DOTS],
-    }
+    return {column_name: row[index] for column_name, index in COLUMN_CONFIG.items()}
 
 
 def save_data_to_csv(data: Payload, save_path: str, header_flag: int) -> None:

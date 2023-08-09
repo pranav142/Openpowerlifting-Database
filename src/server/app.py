@@ -4,8 +4,8 @@ from flask_mysqldb import MySQL
 from dotenv import load_dotenv
 import os
 from enum import Enum
-from tables import Tables, columnsCollection
-from app_utils import (
+from server.tables import Tables, columnsCollection
+from server.app_utils import (
     get_start_and_end_index,
     get_units,
     select_range_data,
@@ -22,7 +22,7 @@ load_dotenv()
 
 app.config["MYSQL_USER"] = os.getenv("MY_SQL_USER")
 app.config["MYSQL_PASSWORD"] = os.getenv("MY_SQL_PASSWORD")
-app.config["MYSQL_DB"] = "test_refactor"
+app.config["MYSQL_DB"] = os.getenv("MY_SQL_DATABASE")
 app.config["MYSQL_HOST"] = os.getenv("MY_SQL_HOST")
 
 mysql = MySQL(app)
@@ -35,9 +35,9 @@ def get_range_records() -> Response:
     formated_data = []
     for table in Tables:
         data = select_range_data(
-            start_index, end_index, table.value[0], sql_connection=mysql
+            start_index, end_index, table.name, sql_connection=mysql
         )
-        formated_data.append(format_response(data, units, table.value[1]))
+        formated_data.append(format_response(data, units, table.columns_collection))
     return jsonify(formated_data)
 
 
@@ -46,8 +46,8 @@ def get_record_from_id(id: int) -> Response:
     units = get_units()
     formated_data = []
     for table in Tables:
-        data = select_record_id(id, table.value[0], sql_connection=mysql)
-        formated_data.append(format_response(data, units, table.value[1]))
+        data = select_record_id(id, table.name, sql_connection=mysql)
+        formated_data.append(format_response(data, units, table.columns_collection))
     return jsonify(formated_data)
 
 
@@ -55,8 +55,8 @@ def get_record_from_id(id: int) -> Response:
 def post_competitor_record() -> Response:
     add_record(
         request.json,
-        table=Tables.records.value[0],
-        columns=Tables.records.value[1].get_all_column_names(),
+        table=Tables.records.name,
+        columns=Tables.records.columns_collection.get_all_column_names(),
         sql_connection=mysql,
     )
     response_data = {"message": "POST request successful!"}
@@ -65,14 +65,14 @@ def post_competitor_record() -> Response:
 
 @app.route("/api/<int:id>/delete-record", methods=["DELETE"])
 def delete_competitor_record(id) -> Response:
-    delete_record(Tables.records.value[0], id, sql_connection=mysql)
+    delete_record(Tables.records.name, id, sql_connection=mysql)
     response_data = {"message": "DELETE request successful!", "id": id}
     return jsonify(response_data)
 
 
 @app.route("/api/<int:id>/update-record", methods=["PUT"])
 def update_competitor_record(id) -> Response:
-    update_record(Tables.records.value[0], id, request.json, sql_connection=mysql)
+    update_record(Tables.records.name, id, request.json, sql_connection=mysql)
     response_data = {"message": "UPDATE request successful!", "id": id}
     return jsonify(response_data)
 

@@ -3,9 +3,15 @@ import mysql.connector
 from mysql.connector.connection import MySQLConnection
 from dotenv import load_dotenv
 import os
-from data.db_utils import MySqlInstance, MySQL, DatabaseError, connect_to_MySQL_instance
+from server.db_utils import (
+    MySqlInstance,
+    MySQL,
+    DatabaseError,
+    connect_to_MySQL_instance,
+)
 from data.utils import timeit
-from tables import Tables
+from server.tables import Tables
+import argparse
 
 
 def create_database(sql_connection: MySQLConnection, database_name: str):
@@ -28,14 +34,12 @@ def create_table(
     try:
         cursor = sql_connection.cursor()
         cursor.execute(f"USE {database_name}")
+        cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
         cursor.execute(f"CREATE TABLE {table_name} ({', '.join(columns)})")
 
         print("Successfully Added Tables")
     except mysql.connector.Error as err:
-        if err.errno == mysql.connector.errorcode.ER_TABLE_EXISTS_ERROR:
-            print("Tables already exist.")
-        else:
-            raise DatabaseError(f"Error creating tables: {err}")
+        raise DatabaseError(f"Error creating tables: {err}")
     finally:
         cursor.close()
 
@@ -86,20 +90,31 @@ def create_db_with_data(
             create_table(
                 sql_connection,
                 database_name=database_name,
-                table_name=table.value[0],
-                columns=table.value[1].get_all_sql_columns(),
+                table_name=table.name,
+                columns=table.columns_collection.get_all_sql_columns(),
             )
 
             populate_table(
                 df,
-                table.value[0],
-                table.value[1].get_all_column_names(),
+                table.name,
+                table.columns_collection.get_all_column_names(),
                 sql_connection,
                 database_name,
             )
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description="Create a database with data.")
+    parser.add_argument(
+        "--name",
+        default=os.getenv("MY_SQL_DATABASE"),
+        help="Name of the database to create (default: MY_SQL_DATABASE from .env)",
+    )
+
+    args = parser.parse_args()
+
+    database_name = args.name
+
     csv_file = "../../data/processed/processed_lifting_data.csv"
 
     load_dotenv()
@@ -111,13 +126,10 @@ def main() -> None:
         password=os.getenv("MY_SQL_PASSWORD"),
     )
 
-    database_name = "test_refactor"
-
     create_db_with_data(
         database_name,
         sql_instance,
         csv_file,
-        tables=Tables,
     )
 
 

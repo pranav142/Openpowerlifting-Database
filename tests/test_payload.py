@@ -3,9 +3,6 @@ from bs4 import BeautifulSoup
 import pytest
 from pytest import MonkeyPatch
 import json
-
-sys.path.append("../src")
-
 from data.payload import Payload
 
 

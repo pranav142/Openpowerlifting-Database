@@ -48,6 +48,14 @@ records_columns = [
 class Tables(Enum):
     records = ("records", columnsCollection(records_columns))
 
+    @property
+    def name(self):
+        return self.value[0]
+
+    @property
+    def columns_collection(self):
+        return self.value[1]
+
     @classmethod
     def get_all_tables(cls):
         return [table.value[0] for table in cls]

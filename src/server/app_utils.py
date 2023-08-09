@@ -1,7 +1,7 @@
 from flask import request
 from flask_mysqldb import MySQL
 from enum import Enum
-from tables import columnsCollection
+from server.tables import columnsCollection
 
 POUNDS_TO_KILOS_COEF = 0.45
 POUNDS_TO_POUNDS_COEF = 1

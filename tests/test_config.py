@@ -1,8 +1,5 @@
 import sys
-
-sys.path.append("../src")
-
-from data.config import Configuration
+from data.scrape_config import Configuration
 import pytest
 import os
 import time

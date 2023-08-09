@@ -37,3 +37,26 @@ class Configuration:
         current_time = time.strftime("[%Y-%m-%d]", time.localtime())
         filename_with_time = current_time + "_" + self.file_name
         return os.path.join(self.folder_dir, filename_with_time)
+
+
+# Dictionary Containing Key and Corresponding Index in Response
+COLUMN_CONFIG = {
+    "Number": 1,
+    "Name": 2,
+    "Instagram Handle": 4,
+    "Origin": 6,
+    "Federation": 8,
+    "Competition Date": 9,
+    "Competition Country": 10,
+    "Competition City": 11,
+    "Gender": 13,
+    "Equipment": 14,
+    "Age": 15,
+    "Weight": 17,
+    "Class": 18,
+    "Squat": 19,
+    "Bench": 20,
+    "Deadlift": 21,
+    "Total": 22,
+    "Dots": 23,
+}
