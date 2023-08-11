@@ -2,7 +2,16 @@ import time
 from functools import wraps
 
 
-def timeit(func):
+def timeit(func: any) -> any:
+    """Wrapper to measure execution time of a function.
+
+    Args:
+        func (any): The function to be wrapped and measured.
+
+    Returns:
+        any: The result returned by the wrapped function.
+    """
+
     @wraps(func)
     def timeit_wrapper(*args, **kwargs):
         start_time = time.perf_counter()

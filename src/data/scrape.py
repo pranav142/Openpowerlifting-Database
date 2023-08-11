@@ -1,16 +1,29 @@
-import requests
+import os
+import time
+from threading import Thread, Lock, current_thread
+
 import pandas as pd
-import time, os
-from threading import Thread, current_thread, Lock
+import requests
 from multiprocessing import current_process
-from payload import Payload
-from data.utils import timeit
+
+from data.payload import Payload
 from data.scrape_config import Configuration, COLUMN_CONFIG
+from data.utils import timeit
 
 
-def get_powerlifting_data(start: int, end: int) -> Payload:
+def get_powerlifting_data(start: int, end: int, timeout: int = 10) -> Payload:
+    """Retrieve powerlifting data from the Open Powerlifting API.
+
+    Args:
+        start (int): The starting rank for the data retrieval.
+        end (int): The ending rank for the data retrieval.
+        timeout (int, optional): The maximum time in seconds to wait for a response. Defaults to 10.
+
+    Returns:
+        Payload: An instance of the Payload class containing the API response data.
+    """
     url = f"https://www.openpowerlifting.org/api/rankings?start={start}&end={end}&lang=en&units=lbs"
-    response = requests.get(url)
+    response = requests.get(url, timeout=timeout)
     data = Payload(
         status=response.status_code, raw_response=response.text, start=start, end=end
     )
@@ -18,15 +31,35 @@ def get_powerlifting_data(start: int, end: int) -> Payload:
 
 
 def row_to_dictionary(row: list):
+    """_summary_
+
+    Args:
+        row (list): _description_
+
+    Returns:
+        _type_: _description_
+    """
     return {column_name: row[index] for column_name, index in COLUMN_CONFIG.items()}
 
 
 def save_data_to_csv(data: Payload, save_path: str, header_flag: int) -> None:
+    """_summary_
+
+    Args:
+        data (Payload): _description_
+        save_path (str): _description_
+        header_flag (int): _description_
+    """
     df = pd.DataFrame([row_to_dictionary(row) for row in data.content["rows"]])
     df.to_csv(save_path, mode="a", header=header_flag, index=False)
 
 
 def get_process_info() -> tuple[str, str, str]:
+    """_summary_
+
+    Returns:
+        tuple[str, str, str]: _description_
+    """
     process_id = os.getpid()
     thread_name = current_thread().name
     process_name = current_process().name
@@ -39,6 +72,14 @@ def scrape_data(
     start_iteration: int,
     end_iteration: int,
 ) -> None:
+    """_summary_
+
+    Args:
+        config (Configuration): _description_
+        lock (Lock): _description_
+        start_iteration (int): _description_
+        end_iteration (int): _description_
+    """
     assert (
         config.step_size > 0 and config.step_size <= 100
     ), "Configuration for step size must be between 0 and 100"
@@ -77,6 +118,7 @@ def scrape_data(
 
 @timeit
 def main() -> None:
+    """_summary_"""
     start_iteration = 0
     config = Configuration(file_name="openpowerlifting.csv", number_of_threads=50)
     lock = Lock()
