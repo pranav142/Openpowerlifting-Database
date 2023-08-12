@@ -84,6 +84,12 @@ def process_data(raw_df_path: str) -> pd.DataFrame:
 
 def clear_save_path(save_df_path: str) -> None:
     """Ensures the save path is clear so there are no file conflicts"""
+    save_dir = os.path.dirname(save_df_path)
+
+    if not os.path.exists(save_dir):
+        print("Folder Doesn't Exist Creating ")
+        os.makedirs(save_dir)
+
     if os.path.exists(save_df_path):
         print("Conflicting file found")
         os.remove(save_df_path)

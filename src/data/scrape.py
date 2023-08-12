@@ -121,6 +121,7 @@ def main() -> None:
     """_summary_"""
     start_iteration = 0
     config = Configuration(file_name="openpowerlifting.csv", number_of_threads=50)
+    config.clear_existing_file()
     lock = Lock()
     print("Config Settings: \n")
     print(f"{config}\n\n")
