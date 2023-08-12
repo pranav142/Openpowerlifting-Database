@@ -110,6 +110,14 @@ def main() -> None:
         default=os.getenv("MY_SQL_DATABASE"),
         help="Name of the database to create (default: MY_SQL_DATABASE from .env)",
     )
+    parser.add_argument("--user", default=os.getenv("MY_SQL_USER"), help="MySQL user")
+    parser.add_argument(
+        "--password", default=os.getenv("MY_SQL_PASSWORD"), help="MySQL password"
+    )
+    parser.add_argument(
+        "--database", default=os.getenv("MY_SQL_DATABASE"), help="MySQL database name"
+    )
+    parser.add_argument("--host", default=os.getenv("MY_SQL_HOST"), help="MySQL host")
 
     args = parser.parse_args()
 
@@ -120,7 +128,7 @@ def main() -> None:
     load_dotenv()
 
     sql_instance = MySqlInstance(
-        host=os.getenv("MY_SQL_HOST"),
+        host=args.host,
         port=os.getenv("MY_SQL_PORT"),
         user=os.getenv("MY_SQL_USER"),
         password=os.getenv("MY_SQL_PASSWORD"),

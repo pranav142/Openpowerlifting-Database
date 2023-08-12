@@ -13,7 +13,7 @@ from mysql.connector.cursor import MySQLCursor
 load_dotenv("../src/server/.env")
 
 server_url = "http://127.0.0.1:8080"
-database_name = "test"
+database_name = os.getenv("MY_SQL_DATABASE")
 csv_file = "../data/processed/processed_lifting_data.csv"
 sql_instance = MySqlInstance(
     host=os.getenv("MY_SQL_HOST"),
@@ -21,7 +21,7 @@ sql_instance = MySqlInstance(
     user=os.getenv("MY_SQL_USER"),
     password=os.getenv("MY_SQL_PASSWORD"),
 )
-create_db_with_data(database_name, sql_instance, csv_file)
+# create_db_with_data(database_name, sql_instance, csv_file)
 sql_connection = connect_to_MySQL_instance(sql_instance)
 cursor = sql_connection.cursor()
 sql_connection.autocommit = True
