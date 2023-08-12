@@ -106,8 +106,8 @@ def scrape_data(
                 save_path=config.save_path,
                 header_flag=not start,
             )
-        except Exception as e:
-            print(f"error on {start} - {end}: {e}")
+        except Exception as error:
+            print(f"error on {start} - {end}: {error}")
             continue
         finally:
             lock.release()

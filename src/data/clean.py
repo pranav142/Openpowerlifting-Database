@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import functools
-from typing import Callable, Optional
+from typing import Callable
 import os
 
 
@@ -52,7 +52,6 @@ def rename_columns(df: pd.DataFrame) -> pd.DataFrame:
 def create_strength_per_bodyweight(df: pd.DataFrame, column: str) -> pd.DataFrame:
     """Creates a column showing relation between bodyweight and strength"""
     assert column in df.columns, f"{column} not found in columns"
-    is_numeric = pd.to_numeric(df[column], errors="coerce").notnull().all()
     df[f"{column}_Per_Body_Weight"] = df[column] / df["Weight"]
     return df
 
