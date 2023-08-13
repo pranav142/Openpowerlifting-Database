@@ -1,6 +1,7 @@
 import pandas as pd
 import mysql.connector
 from mysql.connector.connection import MySQLConnection
+from mysql.connector.cursor import MySQLCursor
 from dotenv import load_dotenv
 import os
 from server.db_utils import (
@@ -12,6 +13,8 @@ from server.db_utils import (
 from data.utils import timeit
 from server.tables import Tables
 import argparse
+import multiprocessing
+import itertools
 
 
 def create_database(sql_connection: MySQLConnection, database_name: str):
@@ -44,24 +47,59 @@ def create_table(
         cursor.close()
 
 
+def connect_to_database(
+    sql_connection: MySQLConnection, database_name: str
+) -> MySQLCursor:
+    cursor = sql_connection.cursor()
+    cursor.execute(f"USE {database_name}")
+    return cursor
+
+
+def execute_truncate_query(cursor: MySQLCursor, table_name: str) -> None:
+    truncate_query = f"TRUNCATE TABLE {table_name}"
+    cursor.execute(truncate_query)
+
+
+def generate_insert_sql(table_name: str, columns: list[str]) -> str:
+    cols = ", ".join(columns)
+    placeholders = ", ".join(["%s" for _ in columns])
+    return f"INSERT INTO {table_name} ({cols}) VALUES ({placeholders})"
+
+
+def insert_batch(
+    cursor: MySQLCursor, sql_connection: MySQLConnection, sql: str, batch: int
+) -> None:
+    cursor.executemany(sql, batch)
+    sql_connection.commit()
+
+
+def print_progress(current_row: int, total_rows: int, spinner: itertools.cycle) -> None:
+    loading_indicator = next(spinner)
+    progress = current_row / total_rows * 100
+    print(
+        f"Inserted {current_row}/{total_rows} rows {loading_indicator} - {progress:.2f} % \r",
+        end="",
+    )
+
+
 def populate_table(
     df: pd.DataFrame,
     table_name: str,
     columns: list[str],
     sql_connection: MySQLConnection,
     database_name: str,
-):
-    cursor = sql_connection.cursor()
-    cursor.execute(f"USE {database_name}")
+    batch_size: int = 1000,
+) -> None:
+    cursor = connect_to_database(sql_connection, database_name)
+    execute_truncate_query(cursor, table_name)
 
-    truncate_query = f"TRUNCATE TABLE {table_name}"
-    cursor.execute(truncate_query)
+    sql = generate_insert_sql(table_name, columns)
+    batch = []
+    spinner = itertools.cycle(["-", "/", "|", "\\"])
+    current_row = 0
+    total_rows = len(df)
 
-    cols = ", ".join(columns)
-    placeholders = ", ".join(["%s" for _ in columns])
-    sql = f"INSERT INTO {table_name} ({cols}) VALUES ({placeholders})"
-
-    for index, row in df.iterrows():
+    for _, row in df.iterrows():
         values = []
         for col in columns:
             value = row[col]
@@ -69,9 +107,19 @@ def populate_table(
                 value = None
             values.append(value)
 
-        cursor.execute(sql, tuple(values))
+        batch.append(tuple(values))
 
-    sql_connection.commit()
+        if len(batch) >= batch_size:
+            insert_batch(cursor, sql_connection, sql, batch)
+            current_row += len(batch)
+            print_progress(current_row, total_rows, spinner)
+            batch = []
+
+    if batch:
+        insert_batch(cursor, sql_connection, sql, batch)
+        current_row += len(batch)
+        print_progress(current_row, total_rows, spinner)
+
     print(f"Finished Populating {table_name} in {database_name} database")
     cursor.close()
 
@@ -103,32 +151,28 @@ def create_db_with_data(
             )
 
 
-def main() -> None:
+def parse_arguments() -> argparse.Namespace:
+    load_dotenv()
+
     parser = argparse.ArgumentParser(description="Create a database with data.")
     parser.add_argument(
         "--name",
         default=os.getenv("MY_SQL_DATABASE"),
         help="Name of the database to create (default: MY_SQL_DATABASE from .env)",
     )
-    parser.add_argument("--user", default=os.getenv("MY_SQL_USER"), help="MySQL user")
-    parser.add_argument(
-        "--password", default=os.getenv("MY_SQL_PASSWORD"), help="MySQL password"
-    )
-    parser.add_argument(
-        "--database", default=os.getenv("MY_SQL_DATABASE"), help="MySQL database name"
-    )
-    parser.add_argument("--host", default=os.getenv("MY_SQL_HOST"), help="MySQL host")
 
     args = parser.parse_args()
+    return args
 
+
+def main() -> None:
+    args = parse_arguments()
     database_name = args.name
 
     csv_file = "../../data/processed/processed_lifting_data.csv"
 
-    load_dotenv()
-
     sql_instance = MySqlInstance(
-        host=args.host,
+        host=os.getenv("MY_SQL_HOST"),
         port=os.getenv("MY_SQL_PORT"),
         user=os.getenv("MY_SQL_USER"),
         password=os.getenv("MY_SQL_PASSWORD"),
