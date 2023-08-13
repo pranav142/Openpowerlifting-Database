@@ -13,7 +13,6 @@ from server.db_utils import (
 from data.utils import timeit
 from server.tables import Tables
 import argparse
-import multiprocessing
 import itertools
 
 

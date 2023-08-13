@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import List
 
 is_weight = True
 
