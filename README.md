@@ -52,6 +52,7 @@ Create a `.env` file in the `src/server` directory and define the following vari
 ```.env
 MY_SQL_HOST=your_host
 MY_SQL_USER=your_user
+MY_SQL_PORT=your_port
 MY_SQL_PASSWORD=your_password
 MY_SQL_DATABASE=desired_schema_name
 ```
