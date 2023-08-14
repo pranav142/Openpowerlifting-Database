@@ -68,3 +68,30 @@ python app.py
 
 9. Access the application.
 Open your web browser and navigate to http://localhost:8080 to see the server up and running.
+
+# API Usage Guide
+
+This guide explains how to use the APIs provided by the project. The project offers several APIs for interacting with data records and documentation.
+
+## API Endpoints
+
+### Serve Documentation
+
+To access the Sphinx-generated documentation, use the following routes:
+
+- `/docs/`: Serves the default documentation index page.
+- `/docs/<path:path>`: Serves other documentation files within the specified path.
+
+### Get Data Records Within a Range
+
+Retrieve data records within a specified range. Replace `<your-host>` with your host and `<your-port>` with your port number.
+
+**Endpoint:** `/api/rankings`
+
+**HTTP Method:** GET
+
+**Example Request:**
+
+```http
+GET http://localhost:8080/api/rankings
+```
