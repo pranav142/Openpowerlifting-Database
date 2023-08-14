@@ -69,29 +69,94 @@ python app.py
 9. Access the application.
 Open your web browser and navigate to http://localhost:8080 to see the server up and running.
 
-# API Usage Guide
+# API Documentation
 
-This guide explains how to use the APIs provided by the project. The project offers several APIs for interacting with data records and documentation.
+This documentation provides information about the various API endpoints and their functionalities.
 
-## API Endpoints
+## Serve Sphinx-generated Documentation
 
-### Serve Documentation
+### Endpoint: `/docs/` and `/docs/<path:path>`
 
-To access the Sphinx-generated documentation, use the following routes:
+Serve the Sphinx-generated documentation files.
 
-- `/docs/`: Serves the default documentation index page.
-- `/docs/<path:path>`: Serves other documentation files within the specified path.
+#### Example API Call
 
-### Get Data Records Within a Range
+- Request: GET `/docs/`
+- Response: HTML documentation file
 
-Retrieve data records within a specified range. Replace `<your-host>` with your host and `<your-port>` with your port number.
+---
 
-**Endpoint:** `/api/rankings`
+## Get Data Records within a Specified Range
 
-**HTTP Method:** GET
+### Endpoint: `/api/rankings`
 
-**Example Request:**
+Retrieve data records within a specified range and return a formatted response.
 
-```http
-GET http://localhost:8080/api/rankings
-```
+#### Example API Call
+
+- Request: GET `/api/rankings`
+- Response: JSON formatted response containing data records
+
+---
+
+## Get Data Record for a Specified ID
+
+### Endpoint: `/api/<int:id>`
+
+Retrieve data records for a specified ID and return a formatted response.
+
+#### Example API Call
+
+- Request: GET `/api/123`
+- Response: JSON formatted response containing data records for ID 123
+
+---
+
+## Add a New Data Record
+
+### Endpoint: `/api/add-record`
+
+Add a new data record and return a response message.
+
+#### Example API Call
+
+- Request: POST `/api/add-record`
+  - Body: JSON data for the new record
+    {
+    "column1": "value1",
+    "column2": "value2",
+    ...
+    }
+- Response: JSON response indicating the success of the POST request
+
+---
+
+## Delete a Data Record by ID
+
+### Endpoint: `/api/<int:id>/delete-record`
+
+Delete a data record by ID and return a response message.
+
+#### Example API Call
+
+- Request: DELETE `/api/123/delete-record`
+- Response: JSON response indicating the success of the DELETE request
+
+---
+
+## Update a Data Record by ID
+
+### Endpoint: `/api/<int:id>/update-record`
+
+Update a data record by ID and return a response message.
+
+#### Example API Call
+
+- Request: PUT `/api/123/update-record`
+- Body: JSON data with updated values
+    {
+    "column1": "new_value1",
+    "column2": "new_value2",
+    ...
+    }
+- Response: JSON response indicating the success of the UPDATE request
