@@ -22,7 +22,7 @@ Make sure you have the following installed:
 1. Clone the repository to your local machine.
 
 ```bash
-https://github.com/pranav142/PowerLifting-Data-Analysis.git
+git clone https://github.com/pranav142/Openpowerlifting-Database.git
 ```
 
 2. navigate to the root directory of the project and install requirements
