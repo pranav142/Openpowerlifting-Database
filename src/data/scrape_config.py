@@ -5,6 +5,20 @@ import os
 
 @dataclass
 class Configuration:
+    """A class for holding configuration settings.
+
+    This class provides attributes and methods related to configuration settings
+    for processing data. It includes default values and methods for calculating
+    iteration steps and managing file paths.
+
+    Attributes:
+        file_name (str): The name of the file to be saved.
+        number_of_threads (int): The number of threads for parallel processing.
+        number_of_examples (int): The total number of examples in the data.
+        step_size (int): The size of each processing step.
+        folder_dir (str): The directory where the file will be saved.
+    """
+
     file_name: str = "default.csv"
     number_of_threads: int = 1
     number_of_examples: int = 452785
@@ -13,10 +27,10 @@ class Configuration:
 
     @property
     def total_iterations(self) -> int:
-        """_summary_
+        """Calculate the total number of iterations based on step size.
 
         Returns:
-            int: _description_
+            int: The total number of iterations.
         """
         assert (
             self.step_size <= self.number_of_examples
@@ -25,10 +39,10 @@ class Configuration:
 
     @property
     def steps(self) -> int:
-        """_summary_
+        """Calculate the number of steps based on threads and total iterations.
 
         Returns:
-            int: _description_
+            int: The number of steps for parallel processing.
         """
         assert (
             self.number_of_threads <= self.total_iterations
@@ -45,10 +59,10 @@ class Configuration:
 
     @property
     def save_path(self) -> str:
-        """_summary_
+        """Generate the save path for the file.
 
         Returns:
-            str: _description_
+            str: The full path where the file will be saved.
         """
         assert os.path.exists(self.folder_dir) and os.path.isdir(
             self.folder_dir
@@ -64,7 +78,7 @@ class Configuration:
 
 
 # Dictionary Containing Key and Corresponding Index in Response
-COLUMN_CONFIG = {
+COLUMN_CONFIG: dict[str, int] = {
     "Number": 1,
     "Name": 2,
     "Instagram Handle": 4,

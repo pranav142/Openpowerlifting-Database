@@ -7,7 +7,15 @@ import seaborn as sns
 def plot_bar_graph(
     *, data: pd.core.series.Series, title: str, xlabel: str, ylabel: str, kind: str
 ):
-    """Plots a bargraph"""
+    """Plot a bar graph.
+
+    Args:
+        data (pd.core.series.Series): Data to be plotted.
+        title (str): Title of the plot.
+        xlabel (str): Label for the x-axis.
+        ylabel (str): Label for the y-axis.
+        kind (str): Type of bar graph (e.g., 'bar', 'barh', etc.).
+    """
     plt.figure(figsize=(10, 7))
     data.plot(kind=kind, color=plt.cm.Set3(range(10)))
     plt.title(title)
@@ -22,7 +30,13 @@ def plot_pie_chart(
     title: str,
     digit_format: str = "%1.1f%%",
 ):
-    """Plots a pie chart"""
+    """Plot a pie chart.
+
+    Args:
+        data (pd.core.series.Series): Data to be plotted.
+        title (str): Title of the plot.
+        digit_format (str, optional): Format for the percentage values. Defaults to "%1.1f%%".
+    """
     plt.figure(figsize=(10, 7))
     plt.pie(
         data.values,
@@ -45,7 +59,17 @@ def plot_histogram(
     hue: str = None,
     column: str,
 ):
-    """Plots a histogram"""
+    """Plot a histogram.
+
+    Args:
+        data (pd.DataFrame): Data to be plotted.
+        title (str): Title of the plot.
+        bins (int): Number of bins for the histogram.
+        xlabel (str): Label for the x-axis.
+        ylabel (str): Label for the y-axis.
+        hue (str, optional): Column name for hue grouping. Defaults to None.
+        column (str): Column to plot the histogram for.
+    """
     assert column in data.columns, "column not found in dataframe"
     ALPHA = 0.4
     plt.figure(figsize=(10, 7))
@@ -82,6 +106,20 @@ def plot_scatterplot(
     ylabel: str = "default",
     title: str = None,
 ) -> None:
+    """Plot a scatterplot.
+
+    Args:
+        data (pd.DataFrame): Data to be plotted.
+        x_column (str): Column for the x-axis.
+        y_column (str): Column for the y-axis.
+        hue (str, optional): Column name for hue grouping. Defaults to None.
+        aspect (int, optional): Aspect ratio of the plot. Defaults to 2.
+        height (int, optional): Height of the plot. Defaults to 7.
+        markers (str, optional): Marker style for the scatter points. Defaults to "o".
+        xlabel (str, optional): Label for the x-axis. Defaults to "default".
+        ylabel (str, optional): Label for the y-axis. Defaults to "default".
+        title (str, optional): Title of the plot. Defaults to None.
+    """
     assert (
         x_column in data.columns and y_column in data.columns
     ), "Column not found in dataframe"
@@ -106,7 +144,13 @@ def plot_scatterplot(
 
 
 def show_column_stats(*, data: pd.DataFrame, column: str, hue: str = None) -> None:
-    """Gives a general overview of a column"""
+    """Show statistics for a column in the DataFrame.
+
+    Args:
+        data (pd.DataFrame): Data for calculating statistics.
+        column (str): Column for which to display statistics.
+        hue (str, optional): Column name for hue grouping. Defaults to None.
+    """
     assert column in data.columns, "column not found in dataframe"
     if hue is None:
         print(f"{column} statistics")

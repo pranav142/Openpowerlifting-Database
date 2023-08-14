@@ -31,34 +31,34 @@ def get_powerlifting_data(start: int, end: int, timeout: int = 10) -> Payload:
 
 
 def row_to_dictionary(row: list):
-    """_summary_
+    """Convert a list of values to a dictionary using COLUMN_CONFIG.
 
     Args:
-        row (list): _description_
+        row (list): A list containing values corresponding to the columns.
 
     Returns:
-        _type_: _description_
+        dict: A dictionary with column names as keys and corresponding values.
     """
     return {column_name: row[index] for column_name, index in COLUMN_CONFIG.items()}
 
 
 def save_data_to_csv(data: Payload, save_path: str, header_flag: int) -> None:
-    """_summary_
+    """Save data from Payload content to a CSV file.
 
     Args:
-        data (Payload): _description_
-        save_path (str): _description_
-        header_flag (int): _description_
+        data (Payload): Payload object containing content to be saved.
+        save_path (str): Path where the CSV file will be saved.
+        header_flag (int): Flag to indicate whether to write header.
     """
     df = pd.DataFrame([row_to_dictionary(row) for row in data.content["rows"]])
     df.to_csv(save_path, mode="a", header=header_flag, index=False)
 
 
 def get_process_info() -> tuple[str, str, str]:
-    """_summary_
+    """Get information about the current process, thread, and name.
 
     Returns:
-        tuple[str, str, str]: _description_
+        tuple[str, str, str]: Process ID, thread name, and process name.
     """
     process_id = os.getpid()
     thread_name = current_thread().name
@@ -72,13 +72,13 @@ def scrape_data(
     start_iteration: int,
     end_iteration: int,
 ) -> None:
-    """_summary_
+    """Scrape data and save to CSV in chunks using multiple threads.
 
     Args:
-        config (Configuration): _description_
-        lock (Lock): _description_
-        start_iteration (int): _description_
-        end_iteration (int): _description_
+        config (Configuration): Configuration object.
+        lock (Lock): Lock for synchronization.
+        start_iteration (int): Starting iteration for scraping.
+        end_iteration (int): Ending iteration for scraping.
     """
     assert (
         config.step_size > 0 and config.step_size <= 100
@@ -118,7 +118,7 @@ def scrape_data(
 
 @timeit
 def main() -> None:
-    """_summary_"""
+    """Main function to initiate data scraping."""
     start_iteration = 0
     config = Configuration(file_name="openpowerlifting.csv", number_of_threads=50)
     config.clear_existing_file()

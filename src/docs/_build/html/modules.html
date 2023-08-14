@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src &mdash; Openpowerlifting-database 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="src.data package" href="data.html" />
+    <link rel="prev" title="Welcome to Openpowerlifting-database’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Openpowerlifting-database
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">src</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data.html">src.data package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server.html">src.server package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualizations.html">src.visualizations package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Openpowerlifting-database</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">src</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src">
+<h1>src<a class="headerlink" href="#src" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data.html">src.data package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#module-data.clean">src.data.clean module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.clean.clean_age_column"><code class="docutils literal notranslate"><span class="pre">clean_age_column()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.clean.clean_class_column"><code class="docutils literal notranslate"><span class="pre">clean_class_column()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.clean.clear_save_path"><code class="docutils literal notranslate"><span class="pre">clear_save_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.clean.compose"><code class="docutils literal notranslate"><span class="pre">compose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.clean.convert_date"><code class="docutils literal notranslate"><span class="pre">convert_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.clean.create_ID_column"><code class="docutils literal notranslate"><span class="pre">create_ID_column()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.clean.create_strength_per_bodyweight"><code class="docutils literal notranslate"><span class="pre">create_strength_per_bodyweight()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.clean.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.clean.process_data"><code class="docutils literal notranslate"><span class="pre">process_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.clean.rename_columns"><code class="docutils literal notranslate"><span class="pre">rename_columns()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.clean.sort_df"><code class="docutils literal notranslate"><span class="pre">sort_df()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#module-data.payload">src.data.payload module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.payload.Payload"><code class="docutils literal notranslate"><span class="pre">Payload</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.payload.Payload.content"><code class="docutils literal notranslate"><span class="pre">Payload.content</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.payload.Payload.end"><code class="docutils literal notranslate"><span class="pre">Payload.end</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.payload.Payload.raw_response"><code class="docutils literal notranslate"><span class="pre">Payload.raw_response</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.payload.Payload.start"><code class="docutils literal notranslate"><span class="pre">Payload.start</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.payload.Payload.status"><code class="docutils literal notranslate"><span class="pre">Payload.status</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.payload.ServerConnectionStatus"><code class="docutils literal notranslate"><span class="pre">ServerConnectionStatus</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.payload.ServerConnectionStatus.INTERNAL_ERROR"><code class="docutils literal notranslate"><span class="pre">ServerConnectionStatus.INTERNAL_ERROR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.payload.ServerConnectionStatus.NOT_FOUND"><code class="docutils literal notranslate"><span class="pre">ServerConnectionStatus.NOT_FOUND</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.payload.ServerConnectionStatus.SUCCESSFUL"><code class="docutils literal notranslate"><span class="pre">ServerConnectionStatus.SUCCESSFUL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.payload.ServerConnectionStatus.UNAUTHORIZED"><code class="docutils literal notranslate"><span class="pre">ServerConnectionStatus.UNAUTHORIZED</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#module-data.scrape">src.data.scrape module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.scrape.get_powerlifting_data"><code class="docutils literal notranslate"><span class="pre">get_powerlifting_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.scrape.get_process_info"><code class="docutils literal notranslate"><span class="pre">get_process_info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.scrape.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.scrape.row_to_dictionary"><code class="docutils literal notranslate"><span class="pre">row_to_dictionary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.scrape.save_data_to_csv"><code class="docutils literal notranslate"><span class="pre">save_data_to_csv()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.scrape.scrape_data"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#module-data.scrape_config">data.scrape_config module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.scrape_config.Configuration"><code class="docutils literal notranslate"><span class="pre">Configuration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.scrape_config.Configuration.clear_existing_file"><code class="docutils literal notranslate"><span class="pre">Configuration.clear_existing_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.scrape_config.Configuration.file_name"><code class="docutils literal notranslate"><span class="pre">Configuration.file_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.scrape_config.Configuration.folder_dir"><code class="docutils literal notranslate"><span class="pre">Configuration.folder_dir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.scrape_config.Configuration.number_of_examples"><code class="docutils literal notranslate"><span class="pre">Configuration.number_of_examples</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.scrape_config.Configuration.number_of_threads"><code class="docutils literal notranslate"><span class="pre">Configuration.number_of_threads</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.scrape_config.Configuration.save_path"><code class="docutils literal notranslate"><span class="pre">Configuration.save_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.scrape_config.Configuration.step_size"><code class="docutils literal notranslate"><span class="pre">Configuration.step_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.scrape_config.Configuration.steps"><code class="docutils literal notranslate"><span class="pre">Configuration.steps</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="data.html#data.scrape_config.Configuration.total_iterations"><code class="docutils literal notranslate"><span class="pre">Configuration.total_iterations</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#module-data.utils">data.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="data.html#data.utils.timeit"><code class="docutils literal notranslate"><span class="pre">timeit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#module-data">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server.html">src.server package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server.html#module-server.app">server.app module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app.configure_app"><code class="docutils literal notranslate"><span class="pre">configure_app()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app.delete_competitor_record"><code class="docutils literal notranslate"><span class="pre">delete_competitor_record()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app.get_range_records"><code class="docutils literal notranslate"><span class="pre">get_range_records()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app.get_record_from_id"><code class="docutils literal notranslate"><span class="pre">get_record_from_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app.parse_args"><code class="docutils literal notranslate"><span class="pre">parse_args()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app.post_competitor_record"><code class="docutils literal notranslate"><span class="pre">post_competitor_record()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app.serve_docs"><code class="docutils literal notranslate"><span class="pre">serve_docs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app.update_competitor_record"><code class="docutils literal notranslate"><span class="pre">update_competitor_record()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="server.html#module-server.app_utils">server.app_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app_utils.Units"><code class="docutils literal notranslate"><span class="pre">Units</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="server.html#server.app_utils.Units.kilos"><code class="docutils literal notranslate"><span class="pre">Units.kilos</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="server.html#server.app_utils.Units.pounds"><code class="docutils literal notranslate"><span class="pre">Units.pounds</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app_utils.add_record"><code class="docutils literal notranslate"><span class="pre">add_record()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app_utils.convert_pounds"><code class="docutils literal notranslate"><span class="pre">convert_pounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app_utils.delete_record"><code class="docutils literal notranslate"><span class="pre">delete_record()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app_utils.execute_sql_query"><code class="docutils literal notranslate"><span class="pre">execute_sql_query()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app_utils.format_data"><code class="docutils literal notranslate"><span class="pre">format_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app_utils.format_response"><code class="docutils literal notranslate"><span class="pre">format_response()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app_utils.generate_select_range_query"><code class="docutils literal notranslate"><span class="pre">generate_select_range_query()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app_utils.get_column_to_order_by"><code class="docutils literal notranslate"><span class="pre">get_column_to_order_by()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app_utils.get_start_and_end_index"><code class="docutils literal notranslate"><span class="pre">get_start_and_end_index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app_utils.get_units"><code class="docutils literal notranslate"><span class="pre">get_units()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app_utils.get_update_values"><code class="docutils literal notranslate"><span class="pre">get_update_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app_utils.select_range_data"><code class="docutils literal notranslate"><span class="pre">select_range_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app_utils.select_record_id"><code class="docutils literal notranslate"><span class="pre">select_record_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.app_utils.update_record"><code class="docutils literal notranslate"><span class="pre">update_record()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="server.html#module-server.create_db">server.create_db module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.create_db.connect_to_database"><code class="docutils literal notranslate"><span class="pre">connect_to_database()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.create_db.create_database"><code class="docutils literal notranslate"><span class="pre">create_database()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.create_db.create_db_with_data"><code class="docutils literal notranslate"><span class="pre">create_db_with_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.create_db.create_table"><code class="docutils literal notranslate"><span class="pre">create_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.create_db.execute_truncate_query"><code class="docutils literal notranslate"><span class="pre">execute_truncate_query()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.create_db.generate_insert_sql"><code class="docutils literal notranslate"><span class="pre">generate_insert_sql()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.create_db.insert_batch"><code class="docutils literal notranslate"><span class="pre">insert_batch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.create_db.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.create_db.parse_arguments"><code class="docutils literal notranslate"><span class="pre">parse_arguments()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.create_db.populate_table"><code class="docutils literal notranslate"><span class="pre">populate_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.create_db.print_progress"><code class="docutils literal notranslate"><span class="pre">print_progress()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="server.html#module-server.db_utils">server.db_utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.db_utils.DatabaseError"><code class="docutils literal notranslate"><span class="pre">DatabaseError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.db_utils.MySQL"><code class="docutils literal notranslate"><span class="pre">MySQL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.db_utils.MySqlInstance"><code class="docutils literal notranslate"><span class="pre">MySqlInstance</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="server.html#server.db_utils.MySqlInstance.host"><code class="docutils literal notranslate"><span class="pre">MySqlInstance.host</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="server.html#server.db_utils.MySqlInstance.password"><code class="docutils literal notranslate"><span class="pre">MySqlInstance.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="server.html#server.db_utils.MySqlInstance.port"><code class="docutils literal notranslate"><span class="pre">MySqlInstance.port</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="server.html#server.db_utils.MySqlInstance.user"><code class="docutils literal notranslate"><span class="pre">MySqlInstance.user</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.db_utils.connect_to_MySQL_instance"><code class="docutils literal notranslate"><span class="pre">connect_to_MySQL_instance()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="server.html#module-server.tables">server.tables module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.tables.Column"><code class="docutils literal notranslate"><span class="pre">Column</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="server.html#server.tables.Column.get_full_sql_column_property"><code class="docutils literal notranslate"><span class="pre">Column.get_full_sql_column_property()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.tables.Tables"><code class="docutils literal notranslate"><span class="pre">Tables</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="server.html#server.tables.Tables.columns_collection"><code class="docutils literal notranslate"><span class="pre">Tables.columns_collection</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="server.html#server.tables.Tables.get_all_tables"><code class="docutils literal notranslate"><span class="pre">Tables.get_all_tables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="server.html#server.tables.Tables.records"><code class="docutils literal notranslate"><span class="pre">Tables.records</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="server.html#server.tables.columnsCollection"><code class="docutils literal notranslate"><span class="pre">columnsCollection</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="server.html#server.tables.columnsCollection.get_all_column_names"><code class="docutils literal notranslate"><span class="pre">columnsCollection.get_all_column_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="server.html#server.tables.columnsCollection.get_all_sql_columns"><code class="docutils literal notranslate"><span class="pre">columnsCollection.get_all_sql_columns()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="server.html#module-server">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="visualizations.html">src.visualizations package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="visualizations.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualizations.html#module-visualizations.charts">visualizations.charts module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="visualizations.html#visualizations.charts.plot_bar_graph"><code class="docutils literal notranslate"><span class="pre">plot_bar_graph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visualizations.html#visualizations.charts.plot_histogram"><code class="docutils literal notranslate"><span class="pre">plot_histogram()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visualizations.html#visualizations.charts.plot_pie_chart"><code class="docutils literal notranslate"><span class="pre">plot_pie_chart()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visualizations.html#visualizations.charts.plot_scatterplot"><code class="docutils literal notranslate"><span class="pre">plot_scatterplot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="visualizations.html#visualizations.charts.show_column_stats"><code class="docutils literal notranslate"><span class="pre">show_column_stats()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="visualizations.html#module-visualizations">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Openpowerlifting-database’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="data.html" class="btn btn-neutral float-right" title="src.data package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Pranav Nadimpalli.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

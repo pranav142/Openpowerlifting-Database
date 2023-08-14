@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.server package &mdash; Openpowerlifting-database 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="src.visualizations package" href="visualizations.html" />
+    <link rel="prev" title="src.data package" href="data.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Openpowerlifting-database
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="data.html">src.data package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">src.server package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-server.app">server.app module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#server.app.configure_app"><code class="docutils literal notranslate"><span class="pre">configure_app()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app.delete_competitor_record"><code class="docutils literal notranslate"><span class="pre">delete_competitor_record()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app.get_range_records"><code class="docutils literal notranslate"><span class="pre">get_range_records()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app.get_record_from_id"><code class="docutils literal notranslate"><span class="pre">get_record_from_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app.parse_args"><code class="docutils literal notranslate"><span class="pre">parse_args()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app.post_competitor_record"><code class="docutils literal notranslate"><span class="pre">post_competitor_record()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app.serve_docs"><code class="docutils literal notranslate"><span class="pre">serve_docs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app.update_competitor_record"><code class="docutils literal notranslate"><span class="pre">update_competitor_record()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-server.app_utils">server.app_utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#server.app_utils.Units"><code class="docutils literal notranslate"><span class="pre">Units</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app_utils.add_record"><code class="docutils literal notranslate"><span class="pre">add_record()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app_utils.convert_pounds"><code class="docutils literal notranslate"><span class="pre">convert_pounds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app_utils.delete_record"><code class="docutils literal notranslate"><span class="pre">delete_record()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app_utils.execute_sql_query"><code class="docutils literal notranslate"><span class="pre">execute_sql_query()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app_utils.format_data"><code class="docutils literal notranslate"><span class="pre">format_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app_utils.format_response"><code class="docutils literal notranslate"><span class="pre">format_response()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app_utils.generate_select_range_query"><code class="docutils literal notranslate"><span class="pre">generate_select_range_query()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app_utils.get_column_to_order_by"><code class="docutils literal notranslate"><span class="pre">get_column_to_order_by()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app_utils.get_start_and_end_index"><code class="docutils literal notranslate"><span class="pre">get_start_and_end_index()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app_utils.get_units"><code class="docutils literal notranslate"><span class="pre">get_units()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app_utils.get_update_values"><code class="docutils literal notranslate"><span class="pre">get_update_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app_utils.select_range_data"><code class="docutils literal notranslate"><span class="pre">select_range_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app_utils.select_record_id"><code class="docutils literal notranslate"><span class="pre">select_record_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.app_utils.update_record"><code class="docutils literal notranslate"><span class="pre">update_record()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-server.create_db">server.create_db module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#server.create_db.connect_to_database"><code class="docutils literal notranslate"><span class="pre">connect_to_database()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.create_db.create_database"><code class="docutils literal notranslate"><span class="pre">create_database()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.create_db.create_db_with_data"><code class="docutils literal notranslate"><span class="pre">create_db_with_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.create_db.create_table"><code class="docutils literal notranslate"><span class="pre">create_table()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.create_db.execute_truncate_query"><code class="docutils literal notranslate"><span class="pre">execute_truncate_query()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.create_db.generate_insert_sql"><code class="docutils literal notranslate"><span class="pre">generate_insert_sql()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.create_db.insert_batch"><code class="docutils literal notranslate"><span class="pre">insert_batch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.create_db.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.create_db.parse_arguments"><code class="docutils literal notranslate"><span class="pre">parse_arguments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.create_db.populate_table"><code class="docutils literal notranslate"><span class="pre">populate_table()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.create_db.print_progress"><code class="docutils literal notranslate"><span class="pre">print_progress()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-server.db_utils">server.db_utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#server.db_utils.DatabaseError"><code class="docutils literal notranslate"><span class="pre">DatabaseError</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.db_utils.MySQL"><code class="docutils literal notranslate"><span class="pre">MySQL</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.db_utils.MySqlInstance"><code class="docutils literal notranslate"><span class="pre">MySqlInstance</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.db_utils.connect_to_MySQL_instance"><code class="docutils literal notranslate"><span class="pre">connect_to_MySQL_instance()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-server.tables">server.tables module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#server.tables.Column"><code class="docutils literal notranslate"><span class="pre">Column</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.tables.Tables"><code class="docutils literal notranslate"><span class="pre">Tables</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#server.tables.columnsCollection"><code class="docutils literal notranslate"><span class="pre">columnsCollection</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-server">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="visualizations.html">src.visualizations package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Openpowerlifting-database</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">src</a></li>
+      <li class="breadcrumb-item active">src.server package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/server.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-server-package">
+<h1>src.server package<a class="headerlink" href="#src-server-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-server.app">
+<span id="server-app-module"></span><h2>server.app module<a class="headerlink" href="#module-server.app" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app.configure_app">
+<span class="sig-prename descclassname"><span class="pre">server.app.</span></span><span class="sig-name descname"><span class="pre">configure_app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Namespace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Flask</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MySQL</span></span></span><a class="reference internal" href="_modules/server/app.html#configure_app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app.configure_app" title="Permalink to this definition"></a></dt>
+<dd><p>Configure the Flask app with MySQL connection settings.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>args (argparse.Namespace): Parsed command line arguments.</p>
+</dd>
+<dt>Returns:</dt><dd><p>MySQL: MySQL connection object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app.delete_competitor_record">
+<span class="sig-prename descclassname"><span class="pre">server.app.</span></span><span class="sig-name descname"><span class="pre">delete_competitor_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/server/app.html#delete_competitor_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app.delete_competitor_record" title="Permalink to this definition"></a></dt>
+<dd><p>Delete a data record by ID and return a response message.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>id (int): ID of the record to delete.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Response: JSON response indicating the success of the DELETE request.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app.get_range_records">
+<span class="sig-prename descclassname"><span class="pre">server.app.</span></span><span class="sig-name descname"><span class="pre">get_range_records</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/server/app.html#get_range_records"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app.get_range_records" title="Permalink to this definition"></a></dt>
+<dd><p>Get data records within a specified range and return the formatted response.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Response: Formatted JSON response containing data records.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app.get_record_from_id">
+<span class="sig-prename descclassname"><span class="pre">server.app.</span></span><span class="sig-name descname"><span class="pre">get_record_from_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/server/app.html#get_record_from_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app.get_record_from_id" title="Permalink to this definition"></a></dt>
+<dd><p>Get data records for a specified ID and return the formatted response.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>id (int): ID of the record to retrieve.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Response: Formatted JSON response containing data records.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app.main">
+<span class="sig-prename descclassname"><span class="pre">server.app.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/server/app.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app.main" title="Permalink to this definition"></a></dt>
+<dd><p>Run the Flask app.</p>
+<p>Starts the Flask app to serve HTTP requests.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app.parse_args">
+<span class="sig-prename descclassname"><span class="pre">server.app.</span></span><span class="sig-name descname"><span class="pre">parse_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Namespace</span></span></span><a class="reference internal" href="_modules/server/app.html#parse_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app.parse_args" title="Permalink to this definition"></a></dt>
+<dd><p>Parse command line arguments and return the parsed namespace.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>argparse.Namespace: Parsed command line arguments.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app.post_competitor_record">
+<span class="sig-prename descclassname"><span class="pre">server.app.</span></span><span class="sig-name descname"><span class="pre">post_competitor_record</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/server/app.html#post_competitor_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app.post_competitor_record" title="Permalink to this definition"></a></dt>
+<dd><p>Add a new data record and return a response message.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Response: JSON response indicating the success of the POST request.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app.serve_docs">
+<span class="sig-prename descclassname"><span class="pre">server.app.</span></span><span class="sig-name descname"><span class="pre">serve_docs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'index.html'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/app.html#serve_docs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app.serve_docs" title="Permalink to this definition"></a></dt>
+<dd><p>Serve the Sphinx-generated documentation files.</p>
+<p>This route serves the Sphinx-generated documentation files from the specified path.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>path (str, optional): The path to the documentation file. Defaults to “index.html”.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Response: The requested documentation file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app.update_competitor_record">
+<span class="sig-prename descclassname"><span class="pre">server.app.</span></span><span class="sig-name descname"><span class="pre">update_competitor_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Response</span></span></span><a class="reference internal" href="_modules/server/app.html#update_competitor_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app.update_competitor_record" title="Permalink to this definition"></a></dt>
+<dd><p>Delete a data record by ID and return a response message.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>id (int): ID of the record to delete.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Response: JSON response indicating the success of the DELETE request.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-server.app_utils">
+<span id="server-app-utils-module"></span><h2>server.app_utils module<a class="headerlink" href="#module-server.app_utils" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="server.app_utils.Units">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">server.app_utils.</span></span><span class="sig-name descname"><span class="pre">Units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/app_utils.html#Units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app_utils.Units" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Enumeration of units for weight conversion.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="server.app_utils.Units.kilos">
+<span class="sig-name descname"><span class="pre">kilos</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('(kgs)',</span> <span class="pre">0.45)</span></em><a class="headerlink" href="#server.app_utils.Units.kilos" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="server.app_utils.Units.pounds">
+<span class="sig-name descname"><span class="pre">pounds</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('(lbs)',</span> <span class="pre">1)</span></em><a class="headerlink" href="#server.app_utils.Units.pounds" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app_utils.add_record">
+<span class="sig-prename descclassname"><span class="pre">server.app_utils.</span></span><span class="sig-name descname"><span class="pre">add_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MySQL</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/server/app_utils.html#add_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app_utils.add_record" title="Permalink to this definition"></a></dt>
+<dd><p>Add a new record to a table.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>data (dict): Data for the new record.
+table (str): Name of the table to add the record to.
+columns (list): List of column names for the record.
+sql_connection (MySQL): MySQL connection object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>tuple: Tuple containing the result of the record addition operation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app_utils.convert_pounds">
+<span class="sig-prename descclassname"><span class="pre">server.app_utils.</span></span><span class="sig-name descname"><span class="pre">convert_pounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#server.app_utils.Units" title="server.app_utils.Units"><span class="pre">Units</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/server/app_utils.html#convert_pounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app_utils.convert_pounds" title="Permalink to this definition"></a></dt>
+<dd><p>Convert weight in pounds to desired units with specified precision.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>pounds (int): Weight in pounds.
+desired_units (Units): Desired units for conversion.
+precision (int, optional): Precision of the result. Defaults to 3.</p>
+</dd>
+<dt>Returns:</dt><dd><p>float: Weight converted to the desired units.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app_utils.delete_record">
+<span class="sig-prename descclassname"><span class="pre">server.app_utils.</span></span><span class="sig-name descname"><span class="pre">delete_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MySQL</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/server/app_utils.html#delete_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app_utils.delete_record" title="Permalink to this definition"></a></dt>
+<dd><p>Delete a record from the specified table.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>table (str): Name of the table to delete the record from.
+id (int): ID of the record to delete.
+sql_connection (MySQL): MySQL connection object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>tuple: Tuple containing the result of the record deletion operation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app_utils.execute_sql_query">
+<span class="sig-prename descclassname"><span class="pre">server.app_utils.</span></span><span class="sig-name descname"><span class="pre">execute_sql_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MySQL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/server/app_utils.html#execute_sql_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app_utils.execute_sql_query" title="Permalink to this definition"></a></dt>
+<dd><p>Execute an SQL query and return the fetched data.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>query (str): SQL query to execute.
+sql_connection (MySQL): MySQL connection object.
+additional_params (tuple, optional): Additional parameters for the query. Defaults to None.</p>
+</dd>
+<dt>Returns:</dt><dd><p>tuple: Fetched data from the query.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app_utils.format_data">
+<span class="sig-prename descclassname"><span class="pre">server.app_utils.</span></span><span class="sig-name descname"><span class="pre">format_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns_collection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#server.tables.columnsCollection" title="server.tables.columnsCollection"><span class="pre">columnsCollection</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#server.app_utils.Units" title="server.app_utils.Units"><span class="pre">Units</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/server/app_utils.html#format_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app_utils.format_data" title="Permalink to this definition"></a></dt>
+<dd><p>Format row data with appropriate units and labels.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>row (list): Row data from a response.
+columns_collection (columnsCollection): Collection of columns’ metadata.
+units (Units): Units for weight conversion.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: Formatted data with units and labels.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app_utils.format_response">
+<span class="sig-prename descclassname"><span class="pre">server.app_utils.</span></span><span class="sig-name descname"><span class="pre">format_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#server.app_utils.Units" title="server.app_utils.Units"><span class="pre">Units</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns_collection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#server.tables.columnsCollection" title="server.tables.columnsCollection"><span class="pre">columnsCollection</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/server/app_utils.html#format_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app_utils.format_response" title="Permalink to this definition"></a></dt>
+<dd><p>Format a response data tuple with appropriate units and labels.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>data (tuple): Response data tuple.
+units (Units): Units for weight conversion.
+columns_collection (columnsCollection): Collection of columns’ metadata.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: Formatted response data with units and labels.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app_utils.generate_select_range_query">
+<span class="sig-prename descclassname"><span class="pre">server.app_utils.</span></span><span class="sig-name descname"><span class="pre">generate_select_range_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/server/app_utils.html#generate_select_range_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app_utils.generate_select_range_query" title="Permalink to this definition"></a></dt>
+<dd><p>Generate an SQL query for selecting a range of records.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>start_index (int): Starting index of the range.
+end_index (int): Ending index of the range.
+table_name (str): Name of the table to query.</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: SQL query to select records within the specified range.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app_utils.get_column_to_order_by">
+<span class="sig-prename descclassname"><span class="pre">server.app_utils.</span></span><span class="sig-name descname"><span class="pre">get_column_to_order_by</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/server/app_utils.html#get_column_to_order_by"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app_utils.get_column_to_order_by" title="Permalink to this definition"></a></dt>
+<dd><p>Get the column name for ordering data.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>str: The column name to use for data ordering.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app_utils.get_start_and_end_index">
+<span class="sig-prename descclassname"><span class="pre">server.app_utils.</span></span><span class="sig-name descname"><span class="pre">get_start_and_end_index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/server/app_utils.html#get_start_and_end_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app_utils.get_start_and_end_index" title="Permalink to this definition"></a></dt>
+<dd><p>Get start and end indices for data selection.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>tuple[int, int]: Tuple containing the start and end indices.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app_utils.get_units">
+<span class="sig-prename descclassname"><span class="pre">server.app_utils.</span></span><span class="sig-name descname"><span class="pre">get_units</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#server.app_utils.Units" title="server.app_utils.Units"><span class="pre">Units</span></a></span></span><a class="reference internal" href="_modules/server/app_utils.html#get_units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app_utils.get_units" title="Permalink to this definition"></a></dt>
+<dd><p>Get the desired units for weight conversion.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Units: The desired units for weight conversion.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app_utils.get_update_values">
+<span class="sig-prename descclassname"><span class="pre">server.app_utils.</span></span><span class="sig-name descname"><span class="pre">get_update_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/server/app_utils.html#get_update_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app_utils.get_update_values" title="Permalink to this definition"></a></dt>
+<dd><p>Get column and value parameters for record updates.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>tuple[str, any]: Tuple containing the column name and the new value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app_utils.select_range_data">
+<span class="sig-prename descclassname"><span class="pre">server.app_utils.</span></span><span class="sig-name descname"><span class="pre">select_range_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MySQL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/server/app_utils.html#select_range_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app_utils.select_range_data" title="Permalink to this definition"></a></dt>
+<dd><p>Select a range of data records from a table.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>start_index (int): Starting index of the range.
+end_index (int): Ending index of the range.
+table_name (str): Name of the table to query.
+sql_connection (MySQL): MySQL connection object.
+max (int, optional): Maximum number of records to retrieve. Defaults to 100.</p>
+</dd>
+<dt>Returns:</dt><dd><p>list: List of data records within the specified range.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app_utils.select_record_id">
+<span class="sig-prename descclassname"><span class="pre">server.app_utils.</span></span><span class="sig-name descname"><span class="pre">select_record_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MySQL</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/server/app_utils.html#select_record_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app_utils.select_record_id" title="Permalink to this definition"></a></dt>
+<dd><p>Select a record by its ID from a table.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>id (int): ID of the record to select.
+table_name (str): Name of the table to query.
+sql_connection (MySQL): MySQL connection object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>tuple: Tuple containing the selected record data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.app_utils.update_record">
+<span class="sig-prename descclassname"><span class="pre">server.app_utils.</span></span><span class="sig-name descname"><span class="pre">update_record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MySQL</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/server/app_utils.html#update_record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.app_utils.update_record" title="Permalink to this definition"></a></dt>
+<dd><p>Update a record in the specified table.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>table (str): Name of the table to update the record in.
+id (int): ID of the record to update.
+data (dict): Updated data for the record.
+sql_connection (MySQL): MySQL connection object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>tuple: Tuple containing the result of the record update operation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-server.create_db">
+<span id="server-create-db-module"></span><h2>server.create_db module<a class="headerlink" href="#module-server.create_db" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="server.create_db.connect_to_database">
+<span class="sig-prename descclassname"><span class="pre">server.create_db.</span></span><span class="sig-name descname"><span class="pre">connect_to_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sql_connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MySQLConnection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MySQLCursor</span></span></span><a class="reference internal" href="_modules/server/create_db.html#connect_to_database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.create_db.connect_to_database" title="Permalink to this definition"></a></dt>
+<dd><p>Connect to the specified database and return a cursor.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>sql_connection (MySQLConnection): MySQL connection object.
+database_name (str): Name of the database to connect to.</p>
+</dd>
+<dt>Returns:</dt><dd><p>MySQLCursor: MySQL cursor for executing queries.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.create_db.create_database">
+<span class="sig-prename descclassname"><span class="pre">server.create_db.</span></span><span class="sig-name descname"><span class="pre">create_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sql_connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MySQLConnection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/create_db.html#create_database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.create_db.create_database" title="Permalink to this definition"></a></dt>
+<dd><p>Create a new database if it does not exist.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>sql_connection (MySQLConnection): MySQL connection object.
+database_name (str): Name of the database to create.</p>
+</dd>
+<dt>Raises:</dt><dd><p>DatabaseError: If there’s an error creating the database.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.create_db.create_db_with_data">
+<span class="sig-prename descclassname"><span class="pre">server.create_db.</span></span><span class="sig-name descname"><span class="pre">create_db_with_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_instance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#server.db_utils.MySqlInstance" title="server.db_utils.MySqlInstance"><span class="pre">MySqlInstance</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">csv_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/server/create_db.html#create_db_with_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.create_db.create_db_with_data" title="Permalink to this definition"></a></dt>
+<dd><p>Create a database and populate it with data from a CSV file.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>database_name (str): Name of the database to create.
+sql_instance (MySqlInstance): MySQL instance configuration.
+csv_file (str): Path to the CSV file containing data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.create_db.create_table">
+<span class="sig-prename descclassname"><span class="pre">server.create_db.</span></span><span class="sig-name descname"><span class="pre">create_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sql_connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MySQLConnection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/server/create_db.html#create_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.create_db.create_table" title="Permalink to this definition"></a></dt>
+<dd><p>Create a new table in the specified database.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>sql_connection (MySQLConnection): MySQL connection object.
+database_name (str): Name of the database.
+table_name (str): Name of the table to create.
+columns (list): List of column definitions for the table.</p>
+</dd>
+<dt>Raises:</dt><dd><p>DatabaseError: If there’s an error creating the table.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.create_db.execute_truncate_query">
+<span class="sig-prename descclassname"><span class="pre">server.create_db.</span></span><span class="sig-name descname"><span class="pre">execute_truncate_query</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cursor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MySQLCursor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/server/create_db.html#execute_truncate_query"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.create_db.execute_truncate_query" title="Permalink to this definition"></a></dt>
+<dd><p>Execute a TRUNCATE query on the specified table.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>cursor (MySQLCursor): MySQL cursor object.
+table_name (str): Name of the table to truncate.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.create_db.generate_insert_sql">
+<span class="sig-prename descclassname"><span class="pre">server.create_db.</span></span><span class="sig-name descname"><span class="pre">generate_insert_sql</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/server/create_db.html#generate_insert_sql"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.create_db.generate_insert_sql" title="Permalink to this definition"></a></dt>
+<dd><p>Generate an SQL query for inserting data into the specified table.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>table_name (str): Name of the table.
+columns (list[str]): List of column names.</p>
+</dd>
+<dt>Returns:</dt><dd><p>str: SQL query for inserting data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.create_db.insert_batch">
+<span class="sig-prename descclassname"><span class="pre">server.create_db.</span></span><span class="sig-name descname"><span class="pre">insert_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cursor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MySQLCursor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MySQLConnection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/server/create_db.html#insert_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.create_db.insert_batch" title="Permalink to this definition"></a></dt>
+<dd><p>Insert a batch of data into the database using the provided SQL query.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>cursor (MySQLCursor): MySQL cursor object.
+sql_connection (MySQLConnection): MySQL connection object.
+sql (str): SQL query for insertion.
+batch (int): Batch of data to insert.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.create_db.main">
+<span class="sig-prename descclassname"><span class="pre">server.create_db.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/server/create_db.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.create_db.main" title="Permalink to this definition"></a></dt>
+<dd><p>Main function to create a database and populate it with data.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.create_db.parse_arguments">
+<span class="sig-prename descclassname"><span class="pre">server.create_db.</span></span><span class="sig-name descname"><span class="pre">parse_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Namespace</span></span></span><a class="reference internal" href="_modules/server/create_db.html#parse_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.create_db.parse_arguments" title="Permalink to this definition"></a></dt>
+<dd><p>Parse command line arguments.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>argparse.Namespace: Parsed arguments.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.create_db.populate_table">
+<span class="sig-prename descclassname"><span class="pre">server.create_db.</span></span><span class="sig-name descname"><span class="pre">populate_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sql_connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MySQLConnection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/server/create_db.html#populate_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.create_db.populate_table" title="Permalink to this definition"></a></dt>
+<dd><p>Populate a table in the database with data from a DataFrame.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>df (pd.DataFrame): DataFrame containing data.
+table_name (str): Name of the table to populate.
+columns (list[str]): List of column names.
+sql_connection (MySQLConnection): MySQL connection object.
+database_name (str): Name of the database.
+batch_size (int, optional): Size of each insertion batch. Defaults to 1000.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.create_db.print_progress">
+<span class="sig-prename descclassname"><span class="pre">server.create_db.</span></span><span class="sig-name descname"><span class="pre">print_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_rows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spinner</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">cycle</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/server/create_db.html#print_progress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.create_db.print_progress" title="Permalink to this definition"></a></dt>
+<dd><p>Print progress information during data population.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>current_row (int): Current row index.
+total_rows (int): Total number of rows.
+spinner (itertools.cycle): Cycle of loading indicators.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-server.db_utils">
+<span id="server-db-utils-module"></span><h2>server.db_utils module<a class="headerlink" href="#module-server.db_utils" title="Permalink to this heading"></a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="server.db_utils.DatabaseError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">server.db_utils.</span></span><span class="sig-name descname"><span class="pre">DatabaseError</span></span><a class="reference internal" href="_modules/server/db_utils.html#DatabaseError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.db_utils.DatabaseError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Custom exception class for database-related errors.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="server.db_utils.MySQL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">server.db_utils.</span></span><span class="sig-name descname"><span class="pre">MySQL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sql_instance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#server.db_utils.MySqlInstance" title="server.db_utils.MySqlInstance"><span class="pre">MySqlInstance</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/db_utils.html#MySQL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.db_utils.MySQL" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Context manager for managing MySQL database connections.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>sql_instance (MySqlInstance): Configuration for the MySQL instance.</p>
+</dd>
+<dt>Example:</dt><dd><dl class="simple">
+<dt>with MySQL(sql_instance) as sql_connection:</dt><dd><p>cursor = sql_connection.cursor()
+cursor.execute(“SELECT * FROM my_table”)
+result = cursor.fetchall()
+cursor.close()</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="server.db_utils.MySqlInstance">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">server.db_utils.</span></span><span class="sig-name descname"><span class="pre">MySqlInstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/db_utils.html#MySqlInstance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.db_utils.MySqlInstance" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Data class representing MySQL instance configuration.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>host (str): Hostname or IP address of the MySQL server.
+port (int): Port number for the MySQL server.
+user (str): Username for authenticating to the MySQL server.
+password (str): Password for authenticating to the MySQL server.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="server.db_utils.MySqlInstance.host">
+<span class="sig-name descname"><span class="pre">host</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#server.db_utils.MySqlInstance.host" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="server.db_utils.MySqlInstance.password">
+<span class="sig-name descname"><span class="pre">password</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#server.db_utils.MySqlInstance.password" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="server.db_utils.MySqlInstance.port">
+<span class="sig-name descname"><span class="pre">port</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#server.db_utils.MySqlInstance.port" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="server.db_utils.MySqlInstance.user">
+<span class="sig-name descname"><span class="pre">user</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#server.db_utils.MySqlInstance.user" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="server.db_utils.connect_to_MySQL_instance">
+<span class="sig-prename descclassname"><span class="pre">server.db_utils.</span></span><span class="sig-name descname"><span class="pre">connect_to_MySQL_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sql_instance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#server.db_utils.MySqlInstance" title="server.db_utils.MySqlInstance"><span class="pre">MySqlInstance</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MySQLConnection</span></span></span><a class="reference internal" href="_modules/server/db_utils.html#connect_to_MySQL_instance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.db_utils.connect_to_MySQL_instance" title="Permalink to this definition"></a></dt>
+<dd><p>Connect to a MySQL database instance.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>sql_instance (MySqlInstance): Configuration for the MySQL instance.</p>
+</dd>
+<dt>Returns:</dt><dd><p>MySQLConnection: A connection to the MySQL database.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-server.tables">
+<span id="server-tables-module"></span><h2>server.tables module<a class="headerlink" href="#module-server.tables" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="server.tables.Column">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">server.tables.</span></span><span class="sig-name descname"><span class="pre">Column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_column_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_sql_properties</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_is_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/tables.html#Column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.tables.Column" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a column in a database table.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>_column_name (str): Name of the column.
+_sql_properties (str): SQL properties for the column.
+_is_weight (bool): Indicates if the column represents weight-related data.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="server.tables.Column.get_full_sql_column_property">
+<span class="sig-name descname"><span class="pre">get_full_sql_column_property</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/tables.html#Column.get_full_sql_column_property"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.tables.Column.get_full_sql_column_property" title="Permalink to this definition"></a></dt>
+<dd><p>Get the full SQL property for the column.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>str: Full SQL property of the column.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="server.tables.Tables">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">server.tables.</span></span><span class="sig-name descname"><span class="pre">Tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/tables.html#Tables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.tables.Tables" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Enumeration of database tables and their column collections.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="server.tables.Tables.columns_collection">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">columns_collection</span></span><a class="headerlink" href="#server.tables.Tables.columns_collection" title="Permalink to this definition"></a></dt>
+<dd><p>Get the columnsCollection instance associated with the table.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>columnsCollection: Collection of columns for the table.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="server.tables.Tables.get_all_tables">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_all_tables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/tables.html#Tables.get_all_tables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.tables.Tables.get_all_tables" title="Permalink to this definition"></a></dt>
+<dd><p>Get a list of all table names.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list[str]: List of all table names.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="server.tables.Tables.records">
+<span class="sig-name descname"><span class="pre">records</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('records',</span> <span class="pre">&lt;server.tables.columnsCollection</span> <span class="pre">object&gt;)</span></em><a class="headerlink" href="#server.tables.Tables.records" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="server.tables.columnsCollection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">server.tables.</span></span><span class="sig-name descname"><span class="pre">columnsCollection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#server.tables.Column" title="server.tables.Column"><span class="pre">server.tables.Column</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/server/tables.html#columnsCollection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.tables.columnsCollection" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Collection of columns for a database table.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="server.tables.columnsCollection.get_all_column_names">
+<span class="sig-name descname"><span class="pre">get_all_column_names</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/server/tables.html#columnsCollection.get_all_column_names"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.tables.columnsCollection.get_all_column_names" title="Permalink to this definition"></a></dt>
+<dd><p>Get a list of all column names.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list[str]: List of all column names.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="server.tables.columnsCollection.get_all_sql_columns">
+<span class="sig-name descname"><span class="pre">get_all_sql_columns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/server/tables.html#columnsCollection.get_all_sql_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#server.tables.columnsCollection.get_all_sql_columns" title="Permalink to this definition"></a></dt>
+<dd><p>Get a list of all SQL column properties.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list[str]: List of all SQL column properties.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-server">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-server" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="data.html" class="btn btn-neutral float-left" title="src.data package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="visualizations.html" class="btn btn-neutral float-right" title="src.visualizations package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Pranav Nadimpalli.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>src.data package &mdash; Openpowerlifting-database 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="src.server package" href="server.html" />
+    <link rel="prev" title="src" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Openpowerlifting-database
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">src.data package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-data.clean">src.data.clean module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data.clean.clean_age_column"><code class="docutils literal notranslate"><span class="pre">clean_age_column()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.clean.clean_class_column"><code class="docutils literal notranslate"><span class="pre">clean_class_column()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.clean.clear_save_path"><code class="docutils literal notranslate"><span class="pre">clear_save_path()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.clean.compose"><code class="docutils literal notranslate"><span class="pre">compose()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.clean.convert_date"><code class="docutils literal notranslate"><span class="pre">convert_date()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.clean.create_ID_column"><code class="docutils literal notranslate"><span class="pre">create_ID_column()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.clean.create_strength_per_bodyweight"><code class="docutils literal notranslate"><span class="pre">create_strength_per_bodyweight()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.clean.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.clean.process_data"><code class="docutils literal notranslate"><span class="pre">process_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.clean.rename_columns"><code class="docutils literal notranslate"><span class="pre">rename_columns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.clean.sort_df"><code class="docutils literal notranslate"><span class="pre">sort_df()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-data.payload">src.data.payload module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data.payload.Payload"><code class="docutils literal notranslate"><span class="pre">Payload</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.payload.ServerConnectionStatus"><code class="docutils literal notranslate"><span class="pre">ServerConnectionStatus</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-data.scrape">src.data.scrape module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data.scrape.get_powerlifting_data"><code class="docutils literal notranslate"><span class="pre">get_powerlifting_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.scrape.get_process_info"><code class="docutils literal notranslate"><span class="pre">get_process_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.scrape.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.scrape.row_to_dictionary"><code class="docutils literal notranslate"><span class="pre">row_to_dictionary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.scrape.save_data_to_csv"><code class="docutils literal notranslate"><span class="pre">save_data_to_csv()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#data.scrape.scrape_data"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-data.scrape_config">data.scrape_config module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data.scrape_config.Configuration"><code class="docutils literal notranslate"><span class="pre">Configuration</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-data.utils">data.utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data.utils.timeit"><code class="docutils literal notranslate"><span class="pre">timeit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-data">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="server.html">src.server package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="visualizations.html">src.visualizations package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Openpowerlifting-database</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">src</a></li>
+      <li class="breadcrumb-item active">src.data package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/data.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="src-data-package">
+<h1>src.data package<a class="headerlink" href="#src-data-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-data.clean">
+<span id="src-data-clean-module"></span><h2>src.data.clean module<a class="headerlink" href="#module-data.clean" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="data.clean.clean_age_column">
+<span class="sig-prename descclassname"><span class="pre">data.clean.</span></span><span class="sig-name descname"><span class="pre">clean_age_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/data/clean.html#clean_age_column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.clean.clean_age_column" title="Permalink to this definition"></a></dt>
+<dd><p>Clean the ‘Age’ column in the DataFrame.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>df (DataFrame): Input DataFrame.</p>
+</dd>
+<dt>Returns:</dt><dd><p>DataFrame: DataFrame with the ‘Age’ column cleaned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.clean.clean_class_column">
+<span class="sig-prename descclassname"><span class="pre">data.clean.</span></span><span class="sig-name descname"><span class="pre">clean_class_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/data/clean.html#clean_class_column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.clean.clean_class_column" title="Permalink to this definition"></a></dt>
+<dd><p>Clean the ‘Class’ column in the DataFrame.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>df (DataFrame): Input DataFrame.</p>
+</dd>
+<dt>Returns:</dt><dd><p>DataFrame: DataFrame with the ‘Class’ column cleaned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.clean.clear_save_path">
+<span class="sig-prename descclassname"><span class="pre">data.clean.</span></span><span class="sig-name descname"><span class="pre">clear_save_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">save_df_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/data/clean.html#clear_save_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.clean.clear_save_path" title="Permalink to this definition"></a></dt>
+<dd><p>Clear the save path if conflicting files exist.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>save_df_path (str): Path to the save file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.clean.compose">
+<span class="sig-prename descclassname"><span class="pre">data.clean.</span></span><span class="sig-name descname"><span class="pre">compose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">functions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/data/clean.html#compose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.clean.compose" title="Permalink to this definition"></a></dt>
+<dd><p>Compose a series of functions into a single function.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p><a href="#id1"><span class="problematic" id="id2">*</span></a>functions (CompasableFunction): Functions to be composed.</p>
+</dd>
+<dt>Returns:</dt><dd><p>CompasableFunction: A new function representing the composition
+of input functions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.clean.convert_date">
+<span class="sig-prename descclassname"><span class="pre">data.clean.</span></span><span class="sig-name descname"><span class="pre">convert_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/data/clean.html#convert_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.clean.convert_date" title="Permalink to this definition"></a></dt>
+<dd><p>Convert the ‘Competition_Date’ column to datetime format.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>df (pd.DataFrame): Input DataFrame containing a ‘Competition_Date’ column.</p>
+</dd>
+<dt>Returns:</dt><dd><p>pd.DataFrame: DataFrame with the ‘Competition_Date’ column converted to datetime.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.clean.create_ID_column">
+<span class="sig-prename descclassname"><span class="pre">data.clean.</span></span><span class="sig-name descname"><span class="pre">create_ID_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/data/clean.html#create_ID_column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.clean.create_ID_column" title="Permalink to this definition"></a></dt>
+<dd><p>Create an ‘ID’ column based on factorizing the ‘Name’ column.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>df (pd.DataFrame): Input DataFrame.</p>
+</dd>
+<dt>Returns:</dt><dd><p>pd.DataFrame: DataFrame with an additional ‘ID’ column.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.clean.create_strength_per_bodyweight">
+<span class="sig-prename descclassname"><span class="pre">data.clean.</span></span><span class="sig-name descname"><span class="pre">create_strength_per_bodyweight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/data/clean.html#create_strength_per_bodyweight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.clean.create_strength_per_bodyweight" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate strength per body weight for a specified column.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>df (pd.DataFrame): Input DataFrame.
+column (str): Name of the column for which strength per body weight is calculated.</p>
+</dd>
+<dt>Returns:</dt><dd><p>pd.DataFrame: DataFrame with an additional column for strength per body weight.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.clean.main">
+<span class="sig-prename descclassname"><span class="pre">data.clean.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_df_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_df_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/data/clean.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.clean.main" title="Permalink to this definition"></a></dt>
+<dd><p>Process raw data and save the processed DataFrame.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>raw_df_path (str): Path to the raw CSV file.
+save_df_path (str): Path to save the processed DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.clean.process_data">
+<span class="sig-prename descclassname"><span class="pre">data.clean.</span></span><span class="sig-name descname"><span class="pre">process_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_df_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/data/clean.html#process_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.clean.process_data" title="Permalink to this definition"></a></dt>
+<dd><p>Process raw data from a CSV file.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>raw_df_path (str): Path to the raw CSV file.</p>
+</dd>
+<dt>Returns:</dt><dd><p>DataFrame: Processed DataFrame.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.clean.rename_columns">
+<span class="sig-prename descclassname"><span class="pre">data.clean.</span></span><span class="sig-name descname"><span class="pre">rename_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/data/clean.html#rename_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.clean.rename_columns" title="Permalink to this definition"></a></dt>
+<dd><p>Replace spaces in column names with underscores.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>df (pd.DataFrame): Input DataFrame.</p>
+</dd>
+<dt>Returns:</dt><dd><p>pd.DataFrame: DataFrame with column names replaced by replacing spaces with underscores.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.clean.sort_df">
+<span class="sig-prename descclassname"><span class="pre">data.clean.</span></span><span class="sig-name descname"><span class="pre">sort_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/data/clean.html#sort_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.clean.sort_df" title="Permalink to this definition"></a></dt>
+<dd><p>Sort the DataFrame based on the ‘Number’ column and reset index.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>df (pd.DataFrame): Input DataFrame containing a ‘Number’ column.</p>
+</dd>
+<dt>Returns:</dt><dd><p>pd.DataFrame: Sorted DataFrame with the ‘Number’ column removed and index reset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-data.payload">
+<span id="src-data-payload-module"></span><h2>src.data.payload module<a class="headerlink" href="#module-data.payload" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="data.payload.Payload">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data.payload.</span></span><span class="sig-name descname"><span class="pre">Payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw_response</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data/payload.html#Payload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.payload.Payload" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class representing a payload from a server response.</p>
+<p>This class holds information about the server response, including its status,
+raw response content, start and end indices, and parsed content if applicable.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>status (int): The status code of the server response.
+raw_response (str): The raw response content.
+start (int): The start index of the payload.
+end (int): The end index of the payload.
+content (Optional[dict[str, any]]): Parsed content of the response.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.payload.Payload.content">
+<span class="sig-name descname"><span class="pre">content</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#data.payload.Payload.content" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.payload.Payload.end">
+<span class="sig-name descname"><span class="pre">end</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#data.payload.Payload.end" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.payload.Payload.raw_response">
+<span class="sig-name descname"><span class="pre">raw_response</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#data.payload.Payload.raw_response" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.payload.Payload.start">
+<span class="sig-name descname"><span class="pre">start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#data.payload.Payload.start" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.payload.Payload.status">
+<span class="sig-name descname"><span class="pre">status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#data.payload.Payload.status" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="data.payload.ServerConnectionStatus">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data.payload.</span></span><span class="sig-name descname"><span class="pre">ServerConnectionStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data/payload.html#ServerConnectionStatus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.payload.ServerConnectionStatus" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>An enumeration of server connection status codes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.payload.ServerConnectionStatus.INTERNAL_ERROR">
+<span class="sig-name descname"><span class="pre">INTERNAL_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">500</span></em><a class="headerlink" href="#data.payload.ServerConnectionStatus.INTERNAL_ERROR" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.payload.ServerConnectionStatus.NOT_FOUND">
+<span class="sig-name descname"><span class="pre">NOT_FOUND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">404</span></em><a class="headerlink" href="#data.payload.ServerConnectionStatus.NOT_FOUND" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.payload.ServerConnectionStatus.SUCCESSFUL">
+<span class="sig-name descname"><span class="pre">SUCCESSFUL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">200</span></em><a class="headerlink" href="#data.payload.ServerConnectionStatus.SUCCESSFUL" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.payload.ServerConnectionStatus.UNAUTHORIZED">
+<span class="sig-name descname"><span class="pre">UNAUTHORIZED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">401</span></em><a class="headerlink" href="#data.payload.ServerConnectionStatus.UNAUTHORIZED" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-data.scrape">
+<span id="src-data-scrape-module"></span><h2>src.data.scrape module<a class="headerlink" href="#module-data.scrape" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="data.scrape.get_powerlifting_data">
+<span class="sig-prename descclassname"><span class="pre">data.scrape.</span></span><span class="sig-name descname"><span class="pre">get_powerlifting_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#data.payload.Payload" title="data.payload.Payload"><span class="pre">Payload</span></a></span></span><a class="reference internal" href="_modules/data/scrape.html#get_powerlifting_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.scrape.get_powerlifting_data" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve powerlifting data from the Open Powerlifting API.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>start (int): The starting rank for the data retrieval.
+end (int): The ending rank for the data retrieval.
+timeout (int, optional): The maximum time in seconds to wait for a response. Defaults to 10.</p>
+</dd>
+<dt>Returns:</dt><dd><p>Payload: An instance of the Payload class containing the API response data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.scrape.get_process_info">
+<span class="sig-prename descclassname"><span class="pre">data.scrape.</span></span><span class="sig-name descname"><span class="pre">get_process_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/data/scrape.html#get_process_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.scrape.get_process_info" title="Permalink to this definition"></a></dt>
+<dd><p>Get information about the current process, thread, and name.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>tuple[str, str, str]: Process ID, thread name, and process name.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.scrape.main">
+<span class="sig-prename descclassname"><span class="pre">data.scrape.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/data/scrape.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.scrape.main" title="Permalink to this definition"></a></dt>
+<dd><p>Main function to initiate data scraping.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.scrape.row_to_dictionary">
+<span class="sig-prename descclassname"><span class="pre">data.scrape.</span></span><span class="sig-name descname"><span class="pre">row_to_dictionary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data/scrape.html#row_to_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.scrape.row_to_dictionary" title="Permalink to this definition"></a></dt>
+<dd><p>Convert a list of values to a dictionary using COLUMN_CONFIG.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>row (list): A list containing values corresponding to the columns.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: A dictionary with column names as keys and corresponding values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.scrape.save_data_to_csv">
+<span class="sig-prename descclassname"><span class="pre">data.scrape.</span></span><span class="sig-name descname"><span class="pre">save_data_to_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#data.payload.Payload" title="data.payload.Payload"><span class="pre">Payload</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header_flag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/data/scrape.html#save_data_to_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.scrape.save_data_to_csv" title="Permalink to this definition"></a></dt>
+<dd><p>Save data from Payload content to a CSV file.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>data (Payload): Payload object containing content to be saved.
+save_path (str): Path where the CSV file will be saved.
+header_flag (int): Flag to indicate whether to write header.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="data.scrape.scrape_data">
+<span class="sig-prename descclassname"><span class="pre">data.scrape.</span></span><span class="sig-name descname"><span class="pre">scrape_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#data.scrape_config.Configuration" title="data.scrape_config.Configuration"><span class="pre">Configuration</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">lock</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">allocate_lock</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_iteration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/data/scrape.html#scrape_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.scrape.scrape_data" title="Permalink to this definition"></a></dt>
+<dd><p>Scrape data and save to CSV in chunks using multiple threads.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>config (Configuration): Configuration object.
+lock (Lock): Lock for synchronization.
+start_iteration (int): Starting iteration for scraping.
+end_iteration (int): Ending iteration for scraping.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-data.scrape_config">
+<span id="data-scrape-config-module"></span><h2>data.scrape_config module<a class="headerlink" href="#module-data.scrape_config" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="data.scrape_config.Configuration">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">data.scrape_config.</span></span><span class="sig-name descname"><span class="pre">Configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default.csv'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_threads</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_examples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">452785</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'../../data/raw'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/data/scrape_config.html#Configuration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.scrape_config.Configuration" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class for holding configuration settings.</p>
+<p>This class provides attributes and methods related to configuration settings
+for processing data. It includes default values and methods for calculating
+iteration steps and managing file paths.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>file_name (str): The name of the file to be saved.
+number_of_threads (int): The number of threads for parallel processing.
+number_of_examples (int): The total number of examples in the data.
+step_size (int): The size of each processing step.
+folder_dir (str): The directory where the file will be saved.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="data.scrape_config.Configuration.clear_existing_file">
+<span class="sig-name descname"><span class="pre">clear_existing_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/data/scrape_config.html#Configuration.clear_existing_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.scrape_config.Configuration.clear_existing_file" title="Permalink to this definition"></a></dt>
+<dd><p>Delete the existing file if it exists.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.scrape_config.Configuration.file_name">
+<span class="sig-name descname"><span class="pre">file_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'default.csv'</span></em><a class="headerlink" href="#data.scrape_config.Configuration.file_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.scrape_config.Configuration.folder_dir">
+<span class="sig-name descname"><span class="pre">folder_dir</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'../../data/raw'</span></em><a class="headerlink" href="#data.scrape_config.Configuration.folder_dir" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.scrape_config.Configuration.number_of_examples">
+<span class="sig-name descname"><span class="pre">number_of_examples</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">452785</span></em><a class="headerlink" href="#data.scrape_config.Configuration.number_of_examples" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.scrape_config.Configuration.number_of_threads">
+<span class="sig-name descname"><span class="pre">number_of_threads</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#data.scrape_config.Configuration.number_of_threads" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="data.scrape_config.Configuration.save_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">save_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#data.scrape_config.Configuration.save_path" title="Permalink to this definition"></a></dt>
+<dd><p>Generate the save path for the file.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>str: The full path where the file will be saved.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="data.scrape_config.Configuration.step_size">
+<span class="sig-name descname"><span class="pre">step_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100</span></em><a class="headerlink" href="#data.scrape_config.Configuration.step_size" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="data.scrape_config.Configuration.steps">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">steps</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#data.scrape_config.Configuration.steps" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the number of steps based on threads and total iterations.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>int: The number of steps for parallel processing.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="data.scrape_config.Configuration.total_iterations">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_iterations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#data.scrape_config.Configuration.total_iterations" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the total number of iterations based on step size.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>int: The total number of iterations.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-data.utils">
+<span id="data-utils-module"></span><h2>data.utils module<a class="headerlink" href="#module-data.utils" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="data.utils.timeit">
+<span class="sig-prename descclassname"><span class="pre">data.utils.</span></span><span class="sig-name descname"><span class="pre">timeit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">any</span></span></span><a class="reference internal" href="_modules/data/utils.html#timeit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#data.utils.timeit" title="Permalink to this definition"></a></dt>
+<dd><p>Wrapper to measure execution time of a function.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>func (any): The function to be wrapped and measured.</p>
+</dd>
+<dt>Returns:</dt><dd><p>any: The result returned by the wrapped function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-data">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-data" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="src" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="server.html" class="btn btn-neutral float-right" title="src.server package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Pranav Nadimpalli.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
