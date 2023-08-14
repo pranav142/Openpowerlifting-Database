@@ -53,3 +53,4 @@ urllib3==1.26.13
 Werkzeug==2.3.6
 west==1.0.0
 yarl==1.9.2
+lxml==4.9.3
