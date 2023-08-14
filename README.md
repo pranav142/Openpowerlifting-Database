@@ -1,10 +1,10 @@
 # Openpowerlifting Database
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/YourUsername/YourRepoName/blob/master/LICENSE)
 
-Welcome to the Openpowerlifting Database project – a robust and comprehensive restful CRUD API designed for seamless access to powerlifting records. These records have been meticulously scraped from [Openpowerlifting.org](https://www.openpowerlifting.org/) and thoughtfully stored within a MySQL database. Our goal is to provide users like you with a powerful tool to explore, retrieve, and interact with this valuable repository of powerlifting data.
+Welcome to the Openpowerlifting Database project – a robust and comprehensive restful CRUD API designed for seamless access to powerlifting records. These records have been meticulously scraped from [Openpowerlifting.org](https://www.openpowerlifting.org/) and thoughtfully stored within a MySQL database. my goal is to provide users like you with a powerful tool to explore, retrieve, and interact with this valuable repository of powerlifting data.
 
 ## Documentation
-For detailed information on how to use our API and dive into the source code, please visit our [API Documentation](https://openpowerlifting-server.orangebush-9d08bf9d.westus2.azurecontainerapps.io/docs/). This documentation serves as a comprehensive guide, helping you navigate the features and functionalities we offer.
+For detailed information on how to use my API and dive into the source code, please visit my [API Documentation](https://openpowerlifting-server.orangebush-9d08bf9d.westus2.azurecontainerapps.io/docs/). This documentation serves as a comprehensive guide, helping you navigate the features and functionalities we offer.
 
 ## Getting Started
 
