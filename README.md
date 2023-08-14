@@ -97,7 +97,22 @@ Retrieve data records within a specified range and return a formatted response.
 - Request: GET `/api/rankings`
 - Response: JSON formatted response containing data records
 
+**Query Parameters:**
+
+- `start_index` (optional): The start index of the range (default: 0).
+- `end_index` (optional): The end index of the range (default: last record).
+- `units` (optional): The units to display weight data ("pounds" or "kilos", default: "pounds").
 ---
+In the above example (`/api/rankings`), the API call requests data records from index 1 to 10, using pounds as the unit for weight values.
+
+---
+
+**Alternate Example API Call:**
+
+- Request: GET `/api/rankings?start_index=5&end_index=15&units=kilos`
+- Response: JSON formatted response containing data records within the specified range and units
+
+In this example, the API call retrieves data records from index 5 to 15, using kilos as the unit for weight values.
 
 ## Get Data Record for a Specified ID
 
@@ -109,8 +124,21 @@ Retrieve data records for a specified ID and return a formatted response.
 
 - Request: GET `/api/123`
 - Response: JSON formatted response containing data records for ID 123
+  
+**Query Parameter:**
+
+- `units` (optional): The units to display weight data ("pounds" or "kilos", default: "pounds").
+
+In this example, the API call retrieves data records for ID 123, requesting weight values to be displayed in kilos.
 
 ---
+
+**Alternate Example API Call:**
+
+- Request: GET `/api/456?units=pounds`
+- Response: JSON formatted response containing data records for ID 456 with weight values in pounds
+
+In this alternate example, the API call retrieves data records for a different specified ID (ID 456), requesting weight values to be displayed in pounds.
 
 ## Add a New Data Record
 
